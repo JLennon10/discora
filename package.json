@@ -1,0 +1,12 @@
+{
+  "name": "discora",
+  "private": true,
+  "workspaces": ["web", "api"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"npm run dev -w api\" \"npm run dev -w web\"",
+    "preview:local": "concurrently -k -n api,web \"npm run start:fixture -w api\" \"npm run preview -w web\"",
+    "build": "npm run build -w web"
+  },
+  "devDependencies": { "concurrently": "^9.2.1" }
+}

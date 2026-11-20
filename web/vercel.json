@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://discora-api.vercel.app/api/:path*" },
+    { "source": "/:section(artis|album|lagu|koleksi|tentang)/:path*", "destination": "/index.html" }
+  ]
+}
