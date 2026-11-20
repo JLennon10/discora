@@ -4,6 +4,7 @@ Discora adalah PWA katalog piringan hitam The Beatles dan empat personelnya. Kat
 
 - Web publik: [Discora](https://discora-web.vercel.app)
 - API publik: [Daftar album](https://discora-api.vercel.app/api/albums)
+- Kode sumber: [Repo GitHub Discora](https://github.com/JLennon10/discora)
 - Data produksi: [Proyek Supabase Discora](https://supabase.com/dashboard/project/slrdzcfilkwqcuebxhss)
 
 ## Jalankan di komputer
@@ -51,7 +52,7 @@ Daftar mengembalikan array JSON dan detail mengembalikan objek. Slug dan ID yang
 
 ## Deploy di Vercel
 
-Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Express dan root `web` dengan preset Vite. Masukkan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` ke lingkungan proyek **API**. Set tujuan rewrite `/api/:path*` di `web/vercel.json` ke domain produksi API untuk lingkungan Anda. Konfigurasi web juga menangani refresh langsung di rute React Router.
+Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Express dan root `web` dengan preset Vite. Izinkan kedua proyek mengakses file di luar root masing-masing agar dapat memakai lockfile workspace. Masukkan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` ke lingkungan proyek **API**. Set tujuan rewrite `/api/:path*` di `web/vercel.json` ke domain produksi API untuk lingkungan Anda. Konfigurasi web juga menangani refresh langsung di rute React Router.
 
 ## Demo asistensi dan responsi
 

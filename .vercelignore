@@ -1,0 +1,8 @@
+.git/
+.vercel/
+**/.vercel/
+**/.env
+**/.env.*
+**/node_modules/
+**/dist/
+supabase/.temp/
