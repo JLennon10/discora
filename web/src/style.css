@@ -65,13 +65,13 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
   box-shadow: 0 2px 10px rgba(38, 30, 25, .035);
 }
 .topbar .brand {
-  display: grid;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  align-content: center;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   min-height: 44px;
 }
+.brand-icon { flex: none; border-radius: 8px; }
+.brand-copy { display: grid; }
 .wordmark {
   display: flex;
   gap: 5px;

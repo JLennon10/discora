@@ -61,8 +61,11 @@ function Header({ returnRoute }) {
             : <Link to="/album" className="wordmark"><Disc size={15} />Discora</Link>}
         </div>
       </> : <Link className="brand" to="/artis">
-        <span className="wordmark">Discora <span className="tag">Arsip</span></span>
-        <small>{title}</small>
+        <img className="brand-icon" src="/icons/discora-192.png" alt="" width="32" height="32" />
+        <span className="brand-copy">
+          <span className="wordmark">Discora <span className="tag">Arsip</span></span>
+          <small>{title}</small>
+        </span>
       </Link>}
       <div className="header-actions">
         {detail ? <button className="icon-button" aria-label={copied === true ? 'Tautan disalin' : 'Bagikan halaman'} onClick={share}>
