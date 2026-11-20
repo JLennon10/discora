@@ -433,6 +433,68 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .credit-block .button { width: fit-content; text-transform: uppercase; padding-inline: 8px; }
 .return-button { display: flex; min-height: 48px; margin-top: 26px; }
 
+.story-jump,
+.story-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: var(--dark-accent);
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.story { margin-top: 18px; }
+.album-detail .story { margin-top: 26px; }
+.story h2, .archive-gallery h2 { display: flex; align-items: center; gap: 7px; }
+.story h2 svg, .archive-gallery h2 svg { color: var(--accent); }
+.story h3 { margin-top: 10px; font-size: 19px; }
+.story p { margin-top: 7px; font-size: 14px; line-height: 1.62; }
+.story-sources {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  margin: 3px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.story-sources a { padding-block: 8px; }
+.archive-gallery { margin-top: 12px; }
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-block: 4px;
+}
+.gallery-controls .icon-button { border-radius: 4px; background: var(--card); color: var(--dark-accent); }
+.gallery-controls .gallery-play { margin-inline-end: auto; }
+.gallery-controls .meta { min-width: 30px; text-align: center; }
+.gallery-viewport {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0;
+  scrollbar-width: none;
+  border-radius: 4px;
+  background: var(--high);
+}
+.gallery-viewport::-webkit-scrollbar { display: none; }
+.gallery-viewport img {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  scroll-snap-align: start;
+}
+.gallery-caption { margin-top: 8px; }
+.gallery-caption > p:first-child { min-height: 2.9em; }
+.gallery-credit { display: flex; flex-wrap: wrap; align-items: center; gap: 0 5px; font-size: 11px; }
+.gallery-credit a { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; color: var(--dark-accent); text-decoration: underline; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
 @media (max-width: 374px) {
   .artist-card { gap: 10px; padding: 14px 12px; }
   .artist-card .tag { font-size: 9px; }
