@@ -15,6 +15,7 @@
   --dock-height: calc(64px + env(safe-area-inset-bottom));
   --app-width: 680px;
   font-synthesis: none;
+  scroll-padding-block: calc(72px + env(safe-area-inset-top)) calc(var(--dock-height) + 8px);
 }
 
 * { box-sizing: border-box; }
