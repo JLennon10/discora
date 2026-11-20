@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useLayoutEffect } from 'react'
+import { Link, useLocation, useOutletContext, useParams } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, AudioLines, BadgeCheck, BookmarkCheck,
   BookmarkPlus, ChevronRight, Disc, Drum, Headphones, Library, Music2, ScrollText, ShieldCheck,
@@ -75,7 +76,13 @@ export function AlbumDetail() {
 
 function AlbumProfile({ album }) {
   const { albums, toggle, storageError } = useCollection()
+  const { hash } = useLocation()
   const saved = albums.some(item => item.slug === album.slug)
+
+  useLayoutEffect(() => {
+    if (hash.startsWith('#trek-')) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'center' })
+  }, [album.slug, hash])
+
   return <article className="page album-detail">
     <div className="album-hero">
       <div className="record" aria-hidden="true" />
@@ -121,17 +128,26 @@ function CreditBlock({ track }) {
     </section>
     {track.writing_note && <section aria-label="Catatan Penulisan">
       <h2 className="meta">Catatan Penulisan</h2>
-      {track.writer && <p>Penulis utama <strong>{track.writer}</strong></p>}
-      <p>{track.writing_note}</p>
+      <p>
+        {track.writer && <>Penulis utama <strong>{track.writer}</strong>. </>}
+        {track.writing_note}
+        {track.writing_source_url && <> <a className="writing-source" href={track.writing_source_url} target="_blank" rel="noreferrer">Baca wawancara</a>.</>}
+      </p>
     </section>}
-    {track.source_url && <div className="credit-sources">
-      <a className="button subtle" href={track.source_url} target="_blank" rel="noreferrer">Lihat Sumber <ArrowUpRight size={16} /></a>
-      {track.writing_source_url && <a className="button subtle" href={track.writing_source_url} target="_blank" rel="noreferrer">Wawancara <ArrowUpRight size={14} /></a>}
-    </div>}
+    {track.source_url && <a className="button subtle" href={track.source_url} target="_blank" rel="noreferrer">Lihat Sumber <ArrowUpRight size={16} /></a>}
   </div>
 }
 
 function TrackProfile({ track }) {
+  const { pathname } = useLocation()
+  const setTrackReturn = useOutletContext()
+  const returnRoute = '/album/' + track.album.slug + '#trek-' + track.id
+
+  useLayoutEffect(() => {
+    setTrackReturn({ pathname, to: returnRoute })
+    return () => setTrackReturn(null)
+  }, [pathname, returnRoute, setTrackReturn])
+
   return <article className="page track-detail">
     <div className="track-edition"><span className="tag"><i /> {track.album.format} • {track.album.catalog}</span></div>
     <div className="panel track-panel">
@@ -140,6 +156,6 @@ function TrackProfile({ track }) {
       {track.description && <p className="track-description">{track.description}</p>}
       <CreditBlock track={track} />
     </div>
-    <Link className="button return-button" to={'/album/' + track.album.slug}><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
+    <Link className="button return-button" to={returnRoute} replace><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
   </article>
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   Archive, ArrowRight, BookOpen, Disc, Grid2X2, Library, Music2, ScrollText,
@@ -13,24 +12,44 @@ export function ArtistList() {
   return <Resource endpoint="artists">{artists => <Artists artists={artists} />}</Resource>
 }
 
+function useCatalogFilters(filterKey) {
+  const [params, setParams] = useSearchParams()
+
+  function update(key, value) {
+    const next = new URLSearchParams(params)
+    if (value) next.set(key, value)
+    else next.delete(key)
+    setParams(next, { replace: true, preventScrollReset: true })
+  }
+
+  return {
+    query: params.get('q') ?? '',
+    chosenFilter: params.get(filterKey),
+    focusSearch: params.has('cari'),
+    setQuery: value => update('q', value),
+    setFilter: value => update(filterKey, value === 'all' ? '' : value),
+  }
+}
+
 function Artists({ artists }) {
-  const [query, setQuery] = useState('')
-  const [filter, setFilter] = useState('all')
+  const { query, chosenFilter, focusSearch, setQuery, setFilter } = useCatalogFilters('jenis')
   const types = [
     { id: 'all', label: 'Semua (' + artists.length + ')', Icon: Grid2X2 },
     { id: 'group', label: 'Grup (' + artists.filter(artist => artist.kind === 'group').length + ')', Icon: UsersRound },
     { id: 'solo', label: 'Karier Solo (' + artists.filter(artist => artist.kind === 'solo').length + ')', Icon: UserRound },
   ]
+  const filter = types.some(type => type.id === chosenFilter) ? chosenFilter : 'all'
   const term = query.trim().toLocaleLowerCase('id')
   const result = artists.filter(artist => (filter === 'all' || filter === artist.kind)
-    && [artist.name, artist.era, artist.summary, artist.highlights, ...artist.tags]
+    && [artist.name, artist.era, artist.summary, artist.highlights,
+      ...artist.tags, ...(artist.albums ?? []).map(album => album.title)]
       .join(' ').toLocaleLowerCase('id').includes(term))
 
   return <div className="page artist-list">
     <Intro Icon={ScrollText} eyebrow="Katalog Master Abbey Road" title="Katalog Artis & Personel">
       Eksplorasi master matrix, kurasi rekaman mono/stereo, serta diskografi piringan hitam kolektif Fab Four dan rekaman solo resmi masing-masing anggota.
     </Intro>
-    <SearchBox value={query} onChange={setQuery} placeholder="Cari artis, tahun, atau album…" />
+    <SearchBox value={query} onChange={setQuery} placeholder="Cari artis, tahun, atau album…" autoFocus={focusSearch} />
     <FilterBar options={types} value={filter} choose={setFilter} label="Jenis artis" />
     <div className="meta-line list-meta" aria-live="polite"><span>Menampilkan {result.length} entri arsip</span><span>Parlophone / Apple Corps</span></div>
     {result.length ? <div className="artist-cards">
@@ -58,11 +77,10 @@ export function AlbumList() {
 }
 
 function Albums({ albums }) {
-  const [query, setQuery] = useState('')
-  const [filter, setFilter] = useState('all')
-  const [params] = useSearchParams()
+  const { query, chosenFilter, focusSearch, setQuery, setFilter } = useCatalogFilters('artis')
   const artistOptions = [...new Map(albums.map(album => [album.artist_slug, album.artist_name]))]
     .map(([id, label]) => ({ id, label }))
+  const filter = artistOptions.some(option => option.id === chosenFilter) ? chosenFilter : 'all'
   const term = query.trim().toLocaleLowerCase('id')
   const result = albums.filter(album => (filter === 'all' || album.artist_slug === filter)
     && album.title.toLocaleLowerCase('id').includes(term))
@@ -71,7 +89,7 @@ function Albums({ albums }) {
     <Intro Icon={Library} eyebrow="Arsip Master Rekaman 1962–1975" title="Katalog Album Piringan Hitam">
       Presisi kuratorial edisi mono & stereo serta rekaman solo keempat personel.
     </Intro>
-    <SearchBox value={query} onChange={setQuery} placeholder="Cari judul album…" autoFocus={params.has('cari')} />
+    <SearchBox value={query} onChange={setQuery} placeholder="Cari judul album…" autoFocus={focusSearch} />
     <FilterBar options={[{ id: 'all', label: 'Semua' }, ...artistOptions]} value={filter} choose={setFilter} label="Filter album menurut artis" />
     <div className="meta-line list-meta" aria-live="polite"><span>Menampilkan {result.length} master rekaman</span><span className="speed"><i /> Format 33⅓ RPM</span></div>
     {result.length ? <div className="album-grid">{result.map(album => <AlbumCard key={album.slug} album={album} />)}</div>
@@ -107,7 +125,7 @@ export function Collection() {
       Buka detail album untuk menyimpan rilisan ke koleksi pribadi.
     </Notice>}
     <CuratorNote title="Catatan Kurator Discora" Icon={ScrollText}>
-      Koleksi tersimpan di browser ini agar album pilihan mudah ditemukan saat bertandang ke record store.
+      Koleksi tersimpan di browser ini. Gunakan saat bertandang ke toko piringan hitam untuk membandingkan edisi, kode katalog, dan kredit penulis lagu dari album pilihan Anda.
     </CuratorNote>
   </div>
 }

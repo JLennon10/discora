@@ -12,8 +12,8 @@ const tabs = [
   { label: 'Tentang', to: '/tentang', Icon: Sparkles },
 ]
 
-function Header() {
-  const { pathname } = useLocation()
+function Header({ returnRoute }) {
+  const { pathname, search: currentSearch } = useLocation()
   const navigate = useNavigate()
   const [, section, slug] = pathname.split('/')
   const detail = Boolean(slug)
@@ -36,8 +36,14 @@ function Header() {
 
   function search() {
     const input = document.getElementById('catalog-search')
-    if (input) input.focus()
-    else navigate('/album?cari=1')
+    if (input) {
+      input.focus()
+      return
+    }
+    const onCatalog = section === 'artis' || section === 'album'
+    const params = new URLSearchParams(onCatalog ? currentSearch : '')
+    params.set('cari', '1')
+    navigate((onCatalog ? pathname : '/album') + '?' + params, { replace: onCatalog })
   }
 
   const title = tabs.find(tab => tab.to === '/' + section)?.label ?? 'Artis'
@@ -45,7 +51,8 @@ function Header() {
     <header className={'topbar ' + (detail ? 'detail-topbar' : '')}>
       {detail ? <>
         <button className="icon-button" aria-label="Kembali" onClick={() => {
-          if (window.history.state?.idx > 0) navigate(-1)
+          if (returnRoute) navigate(returnRoute, { replace: true })
+          else if (window.history.state?.idx > 0) navigate(-1)
           else navigate(section === 'artis' ? '/artis' : '/album')
         }}><ArrowLeft /></button>
         <div className="detail-heading">
@@ -70,16 +77,20 @@ function Header() {
 
 export function Shell() {
   const { pathname } = useLocation()
+  const [trackReturn, setTrackReturn] = useState(null)
+  const returnRoute = trackReturn?.pathname === pathname ? trackReturn.to : null
   return <div className="app">
     <a className="skip" href="#konten">Langsung ke konten</a>
-    <Header />
-    <main id="konten"><Outlet /></main>
+    <Header returnRoute={returnRoute} />
+    <main id="konten"><Outlet context={setTrackReturn} /></main>
     <nav className="bottom-nav" aria-label="Navigasi utama">
       {tabs.map(({ label, to, Icon }) => {
-        const track = to === '/album' && pathname.startsWith('/lagu/')
-        return <NavLink key={to} to={to} className={({ isActive }) => isActive || track ? 'active' : undefined}
-          aria-current={track ? 'location' : undefined}>
-          <Icon size={22} strokeWidth={2.3} /><span>{label}</span>
+        const icon = <><Icon size={22} strokeWidth={2.3} /><span>{label}</span></>
+        if (to === '/album' && pathname.startsWith('/lagu/')) {
+          return <Link key={to} to={to} className="active" aria-current="location">{icon}</Link>
+        }
+        return <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : undefined}>
+          {icon}
         </NavLink>
       })}
     </nav>
@@ -200,7 +211,7 @@ export function Tracklist({ album }) {
       </div>
       <ol start={album.tracks.find(track => track.side === side)?.position}>
         {album.tracks.filter(track => track.side === side).map(track => <li key={track.id}>
-          <Link className="track-row" to={'/lagu/' + track.id}>
+          <Link className="track-row" id={'trek-' + track.id} to={'/lagu/' + track.id}>
             <span className="track-number">{String(track.position).padStart(2, '0')}</span>
             <span className="track-text">
               <strong>{track.title}</strong>

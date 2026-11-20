@@ -3,7 +3,10 @@ import { artists, albums, tracks } from './catalog.mjs'
 
 export function fixtureRepository() {
   return {
-    artists: () => artists,
+    artists: () => artists.map(artist => ({
+      ...artist,
+      albums: albums.filter(album => album.artist_slug === artist.slug).map(({ title }) => ({ title })),
+    })),
     albums: () => albums,
     artist: slug => {
       const artist = artists.find(item => item.slug === slug)
@@ -44,7 +47,7 @@ export function supabaseRepository() {
   const find = (table, column, value) => unwrap(db.from(table).select('*').eq(column, value).maybeSingle())
 
   repository = {
-    artists: () => unwrap(list('artists')),
+    artists: () => unwrap(db.from('artists').select('*, albums(title)').order('rank')),
     albums: () => unwrap(list('albums')),
     async artist(slug) {
       const artist = await find('artists', 'slug', slug)
