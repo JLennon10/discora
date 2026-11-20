@@ -42,6 +42,12 @@ export default defineConfig({
               networkTimeoutSeconds: 4,
               cacheableResponse: { statuses: [200] },
               expiration: { maxEntries: 80, maxAgeSeconds: 30 * 24 * 60 * 60 },
+              plugins: [{
+                handlerDidError: async () => new Response(null, {
+                  status: 503,
+                  headers: { 'X-Discora-Cache': 'miss' },
+                }),
+              }],
             },
           },
         ],

@@ -136,6 +136,10 @@ export function Resource({ endpoint, children }) {
           setResult({ endpoint, attempt, missing: true })
           return
         }
+        if (res.headers.get('X-Discora-Cache') === 'miss') {
+          setResult({ endpoint, attempt, offline: true, failed: true })
+          return
+        }
         if (!res.ok) throw new Error('Catalog request failed')
         const data = await res.json()
         setResult({ endpoint, attempt, data })
