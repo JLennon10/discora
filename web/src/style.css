@@ -13,7 +13,8 @@
   --dark-accent: #6f1d13;
   --title: "Newsreader Variable", Georgia, serif;
   --dock-height: calc(64px + env(safe-area-inset-bottom));
-  --app-width: 680px;
+  --app-width: 460px;
+  --page-gutter: 16px;
   font-synthesis: none;
   scroll-padding-block: calc(72px + env(safe-area-inset-top)) calc(var(--dock-height) + 8px);
 }
@@ -59,7 +60,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
   display: flex;
   align-items: center;
   min-height: calc(64px + env(safe-area-inset-top));
-  padding: env(safe-area-inset-top) 16px 0;
+  padding: env(safe-area-inset-top) var(--page-gutter) 0;
   background: var(--canvas);
   box-shadow: 0 2px 10px rgba(38, 30, 25, .035);
 }
@@ -94,7 +95,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .curator { position: relative; isolation: isolate; width: 40px; color: white; margin-right: -4px; }
 .curator::before { position: absolute; z-index: -1; content: ""; height: 32px; width: 32px; background: var(--dark-accent); border-radius: 12px; }
 .curator svg { width: 16px; height: 16px; }
-.detail-topbar { padding-left: 8px; gap: 5px; }
+.detail-topbar { padding-inline-start: calc(var(--page-gutter) - 8px); gap: 5px; }
 .detail-topbar > .icon-button { color: var(--ink); }
 .detail-heading { display: grid; }
 .detail-heading strong { font: 550 18px/1.1 var(--title); }
@@ -131,7 +132,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .bottom-nav a.active { color: var(--accent); }
 .bottom-nav a.active:nth-child(2) svg { fill: var(--accent); stroke: var(--canvas); background: var(--accent); border-radius: 50%; }
 
-.page { padding: 0 16px; }
+.page { padding: 0 var(--page-gutter); }
 .intro { padding-top: 4px; }
 .intro h1 { margin: 4px 0 7px; }
 .intro p { font-size: 13.5px; }
@@ -448,7 +449,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 }
 
 @media (min-width: 520px) {
-  .page { padding-inline: 24px; }
-  .album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  :root { --page-gutter: 20px; }
+  .intro p { max-width: 44ch; }
   .artist-list .curator-note p { max-width: 48ch; }
 }
