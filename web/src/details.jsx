@@ -26,13 +26,13 @@ function ArtistProfile({ artist }) {
       {artist.image && <img src={artist.image} alt="" />}
       {group && <span className="tag hero-catalog"><BadgeCheck size={13} /> Catalog No. 001-UK</span>}
       <div className="hero-copy">
-        <div className="eyebrow">{group ? 'Arsip Diskografi Kanonik' : 'Arsip Diskografi Solo'}</div>
+        <div className="eyebrow">{group ? 'Kenalan sama bandnya' : 'Karier solo'}</div>
         <h1>{artist.name}</h1>
         <div className="meta-line"><span>{artist.origin} &nbsp;•&nbsp; {artist.era}</span><span>•&nbsp; {artist.genre}</span></div>
       </div>
     </div>
     <section className="panel profile-note">
-      <h2 className="eyebrow">Catatan Kuratorial <ScrollText size={15} /></h2>
+      <h2 className="eyebrow">Kenalan lebih dekat <ScrollText size={15} /></h2>
       <p>{artist.bio}</p>
       {group && <div className="meta-line"><span><Library size={14} /> 12 Album Studio</span></div>}
     </section>
@@ -64,7 +64,7 @@ function ArtistProfile({ artist }) {
     </section>
     <aside className="provenance">
       <div className="meta"><ShieldCheck size={15} /> Kurasi Provenansi {group ? 'Abbey Road' : 'Arsip'}</div>
-      <p>Detail rilisan mencantumkan label, kode katalog, dan tautan rujukan yang tersedia.</p>
+      <p>Mau cek edisinya? Label, kode katalog, dan link sumber bisa kamu lihat di detail album.</p>
     </aside>
   </article>
 }
@@ -107,10 +107,10 @@ function AlbumProfile({ album }) {
         {saved ? <BookmarkCheck size={17} /> : <BookmarkPlus size={17} />}
         {saved ? 'Tersimpan di Koleksi' : 'Simpan ke Koleksi'}
       </button>
-      {storageError && <p role="alert">Koleksi gagal diperbarui. Periksa penyimpanan browser.</p>}
+      {storageError && <p role="alert">Koleksinya belum bisa diperbarui. Cek penyimpanan browser, lalu coba lagi.</p>}
     </div>
     {album.tracks.length ? <Tracklist album={album} /> : <div className="panel solo-tracks">
-      <h2><Headphones size={18} /> Daftar Lagu</h2><p>Daftar lagu belum termuat. Buka ulang halaman saat terhubung ke internet.</p>
+      <h2><Headphones size={18} /> Daftar Lagu</h2><p>Daftar lagunya belum kebuka. Coba buka lagi saat online.</p>
     </div>}
     {album.summary && <aside className="panel solo-tracks">
       <h2><ScrollText size={18} /> Catatan Rilisan</h2>

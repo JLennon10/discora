@@ -73,7 +73,7 @@ function Header({ returnRoute }) {
         </button> : <button className="icon-button" aria-label="Cari di katalog" onClick={search}><Search /></button>}
         {!track && <Link className="icon-button curator" to="/tentang#kurator" aria-label="Tentang kurator"><UserRound size={16} /></Link>}
       </div>
-      {copied && <span role="status" className="share-notice">{copied === true ? 'Tautan disalin' : 'Tautan gagal dibagikan'}</span>}
+      {copied && <span role="status" className="share-notice">{copied === true ? 'Link sudah disalin' : 'Link belum bisa dibagikan'}</span>}
     </header>
   )
 }
@@ -133,8 +133,8 @@ export function Notice({ title, children, action, busy = false }) {
 }
 
 export function Missing() {
-  return <Notice title="Entri tidak ditemukan" action={<Link className="button" to="/artis">Kembali ke katalog</Link>}>
-    Periksa alamat halaman atau buka katalog Discora.
+  return <Notice title="Halaman ini belum ketemu" action={<Link className="button" to="/artis">Kembali ke katalog</Link>}>
+    Cek lagi link-nya, atau cari langsung dari katalog.
   </Notice>
 }
 
@@ -166,12 +166,12 @@ export function Resource({ endpoint, children }) {
     return () => controller.abort()
   }, [endpoint, attempt])
 
-  if (result?.endpoint !== endpoint || result.attempt !== attempt) return <Notice title="Memuat katalog…" busy />
+  if (result?.endpoint !== endpoint || result.attempt !== attempt) return <Notice title="Lagi buka katalog…" busy />
   if (result.missing) return <Missing />
   if (result.failed) return <Notice
-    title={result.offline ? 'Halaman belum tersimpan untuk offline' : 'Katalog gagal dimuat'}
+    title={result.offline ? 'Halaman belum tersimpan untuk offline' : 'Katalognya belum kebuka'}
     action={<button className="button" onClick={() => setAttempt(attempt + 1)}>Coba lagi</button>}>
-    {result.offline ? 'Sambungkan ke internet untuk membuka halaman ini.' : 'Periksa koneksi dan coba muat ulang.'}
+    {result.offline ? 'Sambung lagi ke internet buat buka halaman ini.' : 'Cek koneksimu, lalu coba lagi.'}
   </Notice>
   return children(result.data)
 }

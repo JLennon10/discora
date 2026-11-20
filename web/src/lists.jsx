@@ -7,6 +7,7 @@ import {
   AlbumArtwork, AlbumCard, CuratorNote, FilterBar, Intro, Notice, Resource, SearchBox,
 } from './components.jsx'
 import { useCollection } from './collection.jsx'
+import { artistPhotos } from './artist-photos.js'
 
 export function ArtistList() {
   return <Resource endpoint="artists">{artists => <Artists artists={artists} />}</Resource>
@@ -47,27 +48,31 @@ function Artists({ artists }) {
 
   return <div className="page artist-list">
     <Intro Icon={ScrollText} eyebrow="Katalog Master Abbey Road" title="Katalog Artis & Personel">
-      Eksplorasi master matrix, kurasi rekaman mono/stereo, serta diskografi piringan hitam kolektif Fab Four dan rekaman solo resmi masing-masing anggota.
+      Kenalan sama The Beatles dan empat personelnya. Pilih artis buat ngulik rilisan band sampai album solo mereka.
     </Intro>
     <SearchBox value={query} onChange={setQuery} placeholder="Cari artis, tahun, atau album…" autoFocus={focusSearch} />
     <FilterBar options={types} value={filter} choose={setFilter} label="Jenis artis" />
-    <div className="meta-line list-meta" aria-live="polite"><span>Menampilkan {result.length} entri arsip</span><span>Parlophone / Apple Corps</span></div>
+    <div className="meta-line list-meta" aria-live="polite"><span>{result.length} artis</span><span>Parlophone / Apple Corps</span></div>
     {result.length ? <div className="artist-cards">
       {result.map(artist => <Link className="artist-card" to={'/artis/' + artist.slug} key={artist.slug}>
-        <span className={'artist-monogram tone-' + artist.rank}><span>{artist.initials}</span></span>
+        {artistPhotos[artist.slug]
+          ? <img className="artist-photo" src={'/art/portrait-' + artist.slug + '.webp'} width="68" height="68" alt="" />
+          : <span className="artist-photo artist-initials" aria-hidden="true">{artist.initials}</span>}
         <div className="artist-card-copy">
           <div className="artist-card-title"><h2>{artist.name}</h2>
-            {artist.kind === 'group' && <span className="tag popular">Paling Populer</span>}
+            {artist.kind === 'group' && <span className="tag popular">Mulai di sini</span>}
           </div>
           <div className="artist-era">{artist.era} · {artist.roles}</div>
-          <p>{artist.kind === 'solo' && <b>Album Ikonik:</b>} {artist.summary || artist.highlights}</p>
+          <p>{artist.kind === 'group'
+            ? 'Empat anak Liverpool yang bikin dunia ikut nyanyi.'
+            : <><b>Coba mulai dari</b> {artist.highlights}</>}</p>
           <div className="tags">{artist.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
         </div>
         <ArrowRight className="card-arrow" size={18} />
       </Link>)}
-    </div> : <Notice title="Artis tidak ditemukan">Coba kata kunci atau filter lain.</Notice>}
-    <CuratorNote title="Catatan Kurator Arsip">
-      Kode katalog dan nomor matriks dicantumkan pada edisi yang datanya tersedia. Keduanya membantu mengenali rilisan mono dan stereo dari katalog Parlophone dan Apple Records.
+    </div> : <Notice title="Belum ketemu artisnya">Coba nama, judul album, atau filter lain.</Notice>}
+    <CuratorNote title="Biar nggak salah edisi">
+      Lagi ngincer rilisan tertentu? Cek kode katalog dan nomor matriks buat bedain cetakan piringannya.
     </CuratorNote>
   </div>
 }
@@ -87,13 +92,13 @@ function Albums({ albums }) {
 
   return <div className="page album-list">
     <Intro Icon={Library} eyebrow="Arsip Master Rekaman 1962–1975" title="Katalog Album Piringan Hitam">
-      Presisi kuratorial edisi mono & stereo serta rekaman solo keempat personel.
+      Dari rilisan mono dan stereo sampai album solo. Pilih album, cek daftar lagu, dan cari tahu siapa yang nulis.
     </Intro>
     <SearchBox value={query} onChange={setQuery} placeholder="Cari judul album…" autoFocus={focusSearch} />
     <FilterBar options={[{ id: 'all', label: 'Semua' }, ...artistOptions]} value={filter} choose={setFilter} label="Filter album menurut artis" />
-    <div className="meta-line list-meta" aria-live="polite"><span>Menampilkan {result.length} master rekaman</span><span className="speed"><i /> Format 33⅓ RPM</span></div>
+    <div className="meta-line list-meta" aria-live="polite"><span>{result.length} album</span><span className="speed"><i /> Format 33⅓ RPM</span></div>
     {result.length ? <div className="album-grid">{result.map(album => <AlbumCard key={album.slug} album={album} />)}</div>
-      : <Notice title="Album tidak ditemukan">Coba judul atau filter artis lain.</Notice>}
+      : <Notice title="Belum ketemu albumnya">Coba judul lain atau ganti filter artisnya.</Notice>}
   </div>
 }
 
@@ -101,16 +106,16 @@ export function Collection() {
   const { albums, remove, storageError } = useCollection()
   return <div className="page collection-page">
     <div className="collection-intro">
-      <Intro eyebrow="Kurasi Arsip Pribadi" title="Koleksi Piringan Hitam" />
+      <Intro eyebrow="Album pilihanmu" title="Koleksi Piringan Hitam" />
       <span className="feature-icon" aria-hidden="true"><Archive size={19} /></span>
     </div>
-    {storageError && <p role="alert">Koleksi gagal diperbarui. Periksa penyimpanan browser.</p>}
+    {storageError && <p role="alert">Koleksinya belum bisa diperbarui. Cek penyimpanan browser, lalu coba lagi.</p>}
     {albums.length ? <div className="collection-cards">
       {albums.map((album, index) => <article className="collection-card" key={album.slug}>
         <Link className="collection-link" to={'/album/' + album.slug}>
           <AlbumArtwork album={album} variant="collection_art" />
           <div>
-            <div className="meta-line"><span>{index === 0 ? 'Baru Ditambahkan' : album.label}</span><span>{album.catalog}</span></div>
+            <div className="meta-line"><span>{index === 0 ? 'Baru disimpan' : album.label}</span><span>{album.catalog}</span></div>
             <h2>{album.title}</h2>
             <p>{album.artist_name} • {album.year}</p>
             <span className="tag">{album.edition}</span> <span className="meta">• {album.track_count} Trek</span>
@@ -121,11 +126,11 @@ export function Collection() {
           <button className="button subtle" onClick={() => remove(album.slug)} aria-label={'Hapus ' + album.title + ' dari Koleksi'}><Trash2 size={15} /> Hapus dari Koleksi</button>
         </div>
       </article>)}
-    </div> : <Notice title="Koleksi Anda masih kosong" action={<Link to="/album" className="button">Jelajahi Album</Link>}>
-      Buka detail album untuk menyimpan rilisan ke koleksi pribadi.
+    </div> : <Notice title="Koleksimu masih kosong" action={<Link to="/album" className="button">Cari Album</Link>}>
+      Udah nemu album yang kamu suka? Simpan dari halaman albumnya biar gampang ketemu lagi.
     </Notice>}
-    <CuratorNote title="Catatan Kurator Discora" Icon={ScrollText}>
-      Koleksi tersimpan di browser ini. Gunakan saat bertandang ke toko piringan hitam untuk membandingkan edisi, kode katalog, dan kredit penulis lagu dari album pilihan Anda.
+    <CuratorNote title="Buat dibuka lagi nanti" Icon={ScrollText}>
+      Koleksi tersimpan di browser ini. Pas mampir ke toko piringan hitam, kamu bisa buka lagi buat bandingin edisi dan kode katalog.
     </CuratorNote>
   </div>
 }
@@ -139,14 +144,14 @@ const bibliography = [
 
 export function About() {
   return <div className="page about-page">
-    <Intro Icon={BookOpen} eyebrow="Monograf Arsip" title="Tentang Discora">
-      Dokumentasi visi editorial, metodologi kurasi, dan spesifikasi antarmuka piringan hitam.
+    <Intro Icon={BookOpen} eyebrow="Di balik katalog" title="Tentang Discora">
+      Kenapa Discora dibuat, siapa yang ngerjain, dan dari mana data albumnya.
     </Intro>
     <section className="mission panel">
       <div className="mission-heading"><span className="feature-icon"><Disc size={21} /></span>
-        <div><div className="meta">Pernyataan Misi</div><h2>Preservasi Suara & Presisi Rekaman</h2></div>
+        <div><h2>Berawal dari rasa penasaran</h2></div>
       </div>
-      <blockquote>“Discora adalah Progressive Web App (PWA) katalog piringan hitam mobile-first yang didedikasikan untuk mendokumentasikan warisan musik The Beatles, diskografi solo keempat anggotanya, serta presisi catatan kredit penulis lagu asli.”</blockquote>
+      <p className="mission-copy">Siapa yang nulis lagu favoritmu? Apa bedanya rilisan mono dan stereo? Discora jadi tempat buat ngulik pertanyaan itu, mulai dari album The Beatles sampai rilisan solo keempat personelnya.</p>
       <div className="tags"><span className="tag">Mono & Stereo Matriks</span><span className="tag">Kredit Lennon–McCartney</span><span className="tag">Solo Pressings</span></div>
     </section>
     <section className="curator-panel panel" id="kurator">
@@ -165,11 +170,18 @@ export function About() {
           {url ? <h3><a href={url} target="_blank" rel="noreferrer">{title}</a></h3> : <h3>{title}</h3>}
           <p>{author}</p><small>{details}</small></div>
       </li>)}</ol>
+      <details className="photo-credits">
+        <summary>Kredit foto katalog</summary>
+        <ul>{Object.entries(artistPhotos).map(([slug, photo]) => <li key={slug}>
+          <a href={photo.source} target="_blank" rel="noreferrer">{photo.name}</a>
+          <span>{photo.credit}</span>
+        </li>)}</ul>
+      </details>
     </section>
     <aside className="panel about-footer">
       <span className="feature-icon"><Music2 size={18} /></span>
-      <h2>Edisi Cetak Digital Bebas Distorsi</h2>
-      <p>Dirancang untuk para penggali peti piringan hitam, peneliti katalog, dan penikmat suara autentik.</p>
+      <h2>Selamat ngulik!</h2>
+      <p>Mulai dari album favoritmu atau cari rilisan yang baru kamu kenal.</p>
       <div className="meta">© Discora</div>
     </aside>
   </div>
