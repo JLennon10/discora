@@ -181,7 +181,8 @@ export function CuratorNote({ title, children, Icon = BookOpen }) {
 }
 
 export function AlbumArtwork({ album, variant = 'artwork', className = '' }) {
-  return <img className={'album-artwork ' + className} src={album[variant] || album.artwork} alt={'Sampul ' + album.title} />
+  const source = album[variant] || album.cover || album.artwork
+  return <img className={'album-artwork ' + className} src={source} alt={'Sampul ' + album.title} />
 }
 
 export function AlbumCard({ album }) {

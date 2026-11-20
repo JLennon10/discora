@@ -56,6 +56,7 @@ create table if not exists public.tracks (
   unique (album_slug, position)
 );
 
+alter table public.albums add column if not exists summary text;
 alter table public.tracks add column if not exists writing_source_url text check (writing_source_url like 'https://%');
 
 create index if not exists albums_artist_slug_idx on public.albums(artist_slug);

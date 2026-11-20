@@ -1,6 +1,6 @@
 # Discora
 
-Discora adalah PWA katalog piringan hitam The Beatles dan empat personelnya. Katalog publik berisi lima profil, enam album, dan kredit penulis untuk seluruh 31 trek *Revolver* dan *Abbey Road*. Koleksi disimpan di browser perangkat.
+Discora adalah PWA katalog piringan hitam The Beatles dan empat personelnya. Katalog publik berisi lima profil, enam album, dan kredit penulis untuk seluruh 75 trek. Koleksi disimpan di browser perangkat.
 
 - Web publik: [Discora](https://discora-web.vercel.app)
 - API publik: [Daftar album](https://discora-api.vercel.app/api/albums)
@@ -64,4 +64,13 @@ Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Expres
 
 ## Rujukan katalog
 
-Urutan trek mengikuti daftar album resmi. Kredit penulisan mempunyai rujukan per lagu di API dan UI. Keempat album solo memiliki detail rilisan. Entri trek dan kredit tersedia untuk *Revolver* dan *Abbey Road*. [Revolver](https://usastore.thebeatles.com/products/revolver-lp-remastered) · [Abbey Road](https://www.thebeatles.com/abbey-road-special-anniversary-editions-2019)
+Katalog mengikuti urutan album asli. Durasi dapat berbeda antar pressing atau remaster. Setiap detail lagu menyertakan rujukan kredit.
+
+- [Revolver](https://usastore.thebeatles.com/products/revolver-lp-remastered) dan [catatan sesi dari Apple Corps](https://www.thebeatles.com/announcing-revolver-special-editions)
+- [Abbey Road](https://www.thebeatles.com/abbey-road-special-anniversary-editions-2019)
+- [Imagine dan catatan sampul](https://www.johnlennon.com/music/albums/imagine/)
+- [McCartney dan kredit komposisi dari MPL](https://www.paulmccartney.com/discography/albums/mccartney) · [Durasi remaster 2011](https://music.apple.com/us/album/mccartney-2011-remaster/1443150811)
+- [Living in the Material World](https://www.georgeharrison.com/releases/living-in-the-material-world/) dan [arsip sampul Apple PAS 10006](https://beatlesvinyl.com.ua/uk/george/lp/PAS_10006.html)
+- [Ringo](https://store.ringostarr.com/products/ringo-cd) dan [arsip edisi Apple PCTC 252](https://www.jpgr.co.uk/pctc252.html)
+
+Detail empat album solo memakai gambar sampul arsip. Kartu katalog mengikuti aset visual frame desain. [Imagine](https://www.johnlennon.com/music/albums/imagine/) · [McCartney](https://www.paulmccartney.com/discography/albums/mccartney) · [Living in the Material World](https://jpgr.co.uk/pas10006.html) · [Ringo](https://www.jpgr.co.uk/pctc252.html)

@@ -78,6 +78,7 @@ function AlbumProfile({ album }) {
   const { albums, toggle, storageError } = useCollection()
   const { hash } = useLocation()
   const saved = albums.some(item => item.slug === album.slug)
+  const mix = album.format === 'Solo' ? 'Stereo' : album.format
 
   useLayoutEffect(() => {
     if (hash.startsWith('#trek-')) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'center' })
@@ -88,14 +89,14 @@ function AlbumProfile({ album }) {
       <div className="record" aria-hidden="true" />
       <div className="sleeve">
         <AlbumArtwork album={album} variant="cover" />
-        {album.slug !== 'revolver' && <span className="sleeve-label">{album.format} · {album.catalog}</span>}
+        {album.slug !== 'revolver' && <span className="sleeve-label">{mix} · {album.catalog}</span>}
       </div>
     </div>
     <div className="album-info">
       <h1>{album.title}</h1>
       <Link className="album-artist" to={'/artis/' + album.artist_slug}>{album.artist_name}</Link>
       <p>{album.year} · {album.label} · 12″ Vinyl LP, 33⅓ RPM
-        {album.format !== 'Solo' && <span>{album.format}</span>}
+        <span>{mix}</span>
       </p>
       {(album.sides.length > 0 || album.studio || album.producer) && <div className="tags">
         {album.sides[0] && <span className="tag">Matrix {album.sides[0]}</span>}
@@ -109,9 +110,13 @@ function AlbumProfile({ album }) {
       {storageError && <p role="alert">Koleksi gagal diperbarui. Periksa penyimpanan browser.</p>}
     </div>
     {album.tracks.length ? <Tracklist album={album} /> : <div className="panel solo-tracks">
-      <h2><Headphones size={18} /> Daftar Lagu</h2><p>{album.track_count} trek. Rincian lagu belum tersedia di arsip.</p>
-      {album.source_url && <a href={album.source_url} target="_blank" rel="noreferrer">Lihat rilis resmi <ArrowUpRight size={14} /></a>}
+      <h2><Headphones size={18} /> Daftar Lagu</h2><p>Daftar lagu belum termuat. Buka ulang halaman saat terhubung ke internet.</p>
     </div>}
+    {album.summary && <aside className="panel solo-tracks">
+      <h2><ScrollText size={18} /> Catatan Rilisan</h2>
+      <p>{album.summary}</p>
+      {album.source_url && <a href={album.source_url} target="_blank" rel="noreferrer">Lihat sumber rilisan <ArrowUpRight size={14} /></a>}
+    </aside>}
   </article>
 }
 
@@ -131,7 +136,7 @@ function CreditBlock({ track }) {
       <p>
         {track.writer && <>Penulis utama <strong>{track.writer}</strong>. </>}
         {track.writing_note}
-        {track.writing_source_url && <> <a className="writing-source" href={track.writing_source_url} target="_blank" rel="noreferrer">Baca wawancara</a>.</>}
+        {track.writing_source_url && <> <a className="writing-source" href={track.writing_source_url} target="_blank" rel="noreferrer">Sumber tambahan</a>.</>}
       </p>
     </section>}
     {track.source_url && <a className="button subtle" href={track.source_url} target="_blank" rel="noreferrer">Lihat Sumber <ArrowUpRight size={16} /></a>}
@@ -142,6 +147,8 @@ function TrackProfile({ track }) {
   const { pathname } = useLocation()
   const setTrackReturn = useOutletContext()
   const returnRoute = '/album/' + track.album.slug + '#trek-' + track.id
+  const mix = track.album.format === 'Solo' ? 'Stereo' : track.album.format
+  const recordingNote = track.description || track.annotation
 
   useLayoutEffect(() => {
     setTrackReturn({ pathname, to: returnRoute })
@@ -149,11 +156,11 @@ function TrackProfile({ track }) {
   }, [pathname, returnRoute, setTrackReturn])
 
   return <article className="page track-detail">
-    <div className="track-edition"><span className="tag"><i /> {track.album.format} • {track.album.catalog}</span></div>
+    <div className="track-edition"><span className="tag"><i /> {mix} • {track.album.catalog}</span></div>
     <div className="panel track-panel">
       <div className="meta track-context">{track.album.title} <span>·</span> Trek {track.position} <span>·</span> {track.duration}</div>
       <h1>{track.title}</h1>
-      {track.description && <p className="track-description">{track.description}</p>}
+      {recordingNote && <p className="track-description">{recordingNote}</p>}
       <CreditBlock track={track} />
     </div>
     <Link className="button return-button" to={returnRoute} replace><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
