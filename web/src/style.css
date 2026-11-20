@@ -341,7 +341,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .about-footer .feature-icon { width: 32px; height: 32px; }
 .about-footer .meta { margin-top: 10px; color: var(--subtle); text-transform: uppercase; }
 
-.artist-hero { position: relative; overflow: hidden; min-height: 224px; aspect-ratio: 1.6; border-radius: 8px; color: white; background: #403a2d; box-shadow: 0 2px 5px #34302c25; }
+.artist-hero { position: relative; overflow: hidden; width: 100%; min-height: 224px; aspect-ratio: 1.6; border-radius: 8px; color: white; background: #403a2d; box-shadow: 0 2px 5px #34302c25; }
 .artist-hero img, .artist-hero::after { position: absolute; inset: 0; width: 100%; height: 100%; }
 .artist-hero img { object-fit: cover; object-position: center 45%; }
 .artist-hero::after { content: ""; background: linear-gradient(0deg, #29241fde, #29241f0c 88%); }
