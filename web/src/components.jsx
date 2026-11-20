@@ -4,6 +4,7 @@ import {
   Archive, ArrowLeft, AudioLines, BookOpen, Check, ChevronRight, Disc, Search,
   Share2, Sparkles, UserRound, UsersRound,
 } from 'lucide-react'
+import { artistPhotos } from './artist-photos.js'
 
 const tabs = [
   { label: 'Artis', to: '/artis', Icon: UsersRound },
@@ -186,6 +187,13 @@ export function CuratorNote({ title, children, Icon = BookOpen }) {
 export function AlbumArtwork({ album, variant = 'artwork', className = '' }) {
   const source = album[variant] || album.cover || album.artwork
   return <img className={'album-artwork ' + className} src={source} alt={'Sampul ' + album.title} />
+}
+
+export function ArtistPortrait({ artist }) {
+  if (!artistPhotos[artist.slug]) {
+    return <span className="artist-photo artist-initials" aria-hidden="true">{artist.initials}</span>
+  }
+  return <img className="artist-photo" src={'/art/portrait-' + artist.slug + '.webp'} width="68" height="68" alt="" />
 }
 
 export function AlbumCard({ album }) {

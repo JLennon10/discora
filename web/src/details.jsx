@@ -1,18 +1,18 @@
 import { useLayoutEffect } from 'react'
 import { Link, useLocation, useOutletContext, useParams } from 'react-router-dom'
 import {
-  ArrowLeft, ArrowRight, ArrowUpRight, AudioLines, BadgeCheck, BookmarkCheck,
-  BookmarkPlus, ChevronRight, Disc, Drum, Headphones, Library, Music2, ScrollText, ShieldCheck,
+  ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookmarkCheck,
+  BookmarkPlus, ChevronRight, Disc, Headphones, Library, ScrollText, ShieldCheck,
 } from 'lucide-react'
-import { AlbumArtwork, Resource, Tracklist } from './components.jsx'
+import { AlbumArtwork, ArtistPortrait, Resource, Tracklist } from './components.jsx'
 import { useCollection } from './collection.jsx'
 
-const memberInfo = [
-  ['Vokal, Gitar Ritem, Piano', Music2],
-  ['Vokal, Bass, Piano', AudioLines],
-  ['Gitar Utama, Sitar, Vokal', Disc],
-  ['Drum, Perkusi, Vokal', Drum],
-]
+const memberRoles = {
+  'john-lennon': 'Vokal, Gitar Ritem, Piano',
+  'paul-mccartney': 'Vokal, Bass, Piano',
+  'george-harrison': 'Gitar Utama, Sitar, Vokal',
+  'ringo-starr': 'Drum, Perkusi, Vokal',
+}
 
 export function ArtistDetail() {
   const { slug } = useParams()
@@ -38,14 +38,13 @@ function ArtistProfile({ artist }) {
     </section>
     {artist.members.length > 0 && <section className="band">
       <div className="section-heading"><h2>Anggota Band</h2><span className="meta">Kuartet Inti</span></div>
-      <div className="member-list">{artist.members.map((member, index) => {
-        const [role, Icon] = memberInfo[index] ?? [member.roles, Music2]
-        return <Link to={'/artis/' + member.slug} className="member-card" key={member.slug}>
-          <span className={'feature-icon tone-' + member.rank}><Icon size={18} /></span>
-          <div><h3>{member.name}</h3><p>{role}</p></div>
+      <div className="member-list">{artist.members.map(member => (
+        <Link to={'/artis/' + member.slug} className="member-card" key={member.slug}>
+          <ArtistPortrait artist={member} />
+          <div><h3>{member.name}</h3><p>{memberRoles[member.slug] ?? member.roles}</p></div>
           <ChevronRight size={18} />
         </Link>
-      })}</div>
+      ))}</div>
     </section>}
     <section className="selected">
       <div className="section-heading"><h2><Disc size={18} /> Album Pilihan</h2><span className="meta">Piringan Hitam</span></div>

@@ -4,7 +4,7 @@ import {
   Trash2, UserRound, UsersRound, BadgeCheck,
 } from 'lucide-react'
 import {
-  AlbumArtwork, AlbumCard, CuratorNote, FilterBar, Intro, Notice, Resource, SearchBox,
+  AlbumArtwork, AlbumCard, ArtistPortrait, CuratorNote, FilterBar, Intro, Notice, Resource, SearchBox,
 } from './components.jsx'
 import { useCollection } from './collection.jsx'
 import { artistPhotos } from './artist-photos.js'
@@ -55,9 +55,7 @@ function Artists({ artists }) {
     <div className="meta-line list-meta" aria-live="polite"><span>{result.length} artis</span><span>Parlophone / Apple Corps</span></div>
     {result.length ? <div className="artist-cards">
       {result.map(artist => <Link className="artist-card" to={'/artis/' + artist.slug} key={artist.slug}>
-        {artistPhotos[artist.slug]
-          ? <img className="artist-photo" src={'/art/portrait-' + artist.slug + '.webp'} width="68" height="68" alt="" />
-          : <span className="artist-photo artist-initials" aria-hidden="true">{artist.initials}</span>}
+        <ArtistPortrait artist={artist} />
         <div className="artist-card-copy">
           <div className="artist-card-title"><h2>{artist.name}</h2>
             {artist.kind === 'group' && <span className="tag popular">Mulai di sini</span>}

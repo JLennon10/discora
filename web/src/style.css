@@ -358,12 +358,11 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .profile-note svg { color: var(--accent); }
 .band, .selected { margin-top: 24px; }
 .member-list { display: grid; gap: 8px; }
-.member-card { display: grid; grid-template-columns: 40px 1fr 17px; align-items: center; gap: 16px; background: var(--card); border-radius: 4px; padding: 10px 16px; }
+.member-card { display: grid; grid-template-columns: 48px minmax(0, 1fr) 18px; align-items: center; gap: 16px; background: var(--card); border-radius: 4px; padding: 10px 16px; }
+.member-card .artist-photo { width: 48px; height: 48px; border-radius: 8px; }
 .member-card h3 { font-weight: 650; }
 .member-card p { margin-top: 3px; }
 .member-card > svg { color: var(--muted); }
-.member-card .tone-4 { background: #ece1cf; color: #403a2d; }
-.member-card .tone-5 { background: #ffb2a5; color: var(--accent); }
 .selected .section-heading .meta, .selected-copy .meta-line span:first-child { color: var(--dark-accent); }
 .selected-album + .selected-album { margin-top: 15px; }
 .selected-copy { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; }
