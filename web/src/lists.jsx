@@ -16,7 +16,7 @@ function useCatalogFilters(filterKey) {
   const [params, setParams] = useSearchParams()
 
   function update(key, value) {
-    const next = new URLSearchParams(params)
+    const next = new URLSearchParams(window.location.search)
     if (value) next.set(key, value)
     else next.delete(key)
     setParams(next, { replace: true, preventScrollReset: true })
