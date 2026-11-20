@@ -41,7 +41,7 @@ export default defineConfig({
               cacheName: 'discora-catalog-v1',
               networkTimeoutSeconds: 4,
               cacheableResponse: { statuses: [200] },
-              expiration: { maxEntries: 80, maxAgeSeconds: 30 * 24 * 60 * 60 },
+              expiration: { maxEntries: 96, maxAgeSeconds: 30 * 24 * 60 * 60 },
               plugins: [{
                 handlerDidError: async () => new Response(null, {
                   status: 503,
