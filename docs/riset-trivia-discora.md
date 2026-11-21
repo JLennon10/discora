@@ -130,7 +130,7 @@ Isi di bawah berupa draf trivia singkat. Frasa “menurut” penting untuk cerit
 ## Penerapan di Discora
 
 - “Cerita di Balik Lagu” tampil setelah Kredit Resmi dan Catatan Penulisan. “Cerita di Balik Album” tampil setelah tracklist dan catatan rilisan, dengan tautan lompat dari dekat tombol koleksi.
-- Galeri awal ada di album *Abbey Road* dan di album serta lagu “Imagine”. Foto bisa digeser atau dipilih dengan tombol. Galeri maju otomatis saat terlihat dan sedang idle, dengan kontrol jeda dan dukungan preferensi perangkat untuk mengurangi animasi.
+- Galeri ada di album *Abbey Road*, di album serta lagu “Imagine”, dan di *Revolver*, “Yellow Submarine”, serta “Eleanor Rigby”. Foto bisa digeser atau dipilih dengan tombol. Galeri maju otomatis saat terlihat, dengan kontrol jeda dan dukungan preferensi perangkat untuk mengurangi animasi.
 - Prioritas riset lanjutan adalah asal-usul lagu yang kini baru punya rujukan take alternatif, terutama di *Living in the Material World*, dan izin pakai foto studio asli. Klaim konflik perlu menyebut siapa yang bicara dan kapan.
 
 [rev]: https://www.thebeatles.com/announcing-revolver-special-editions

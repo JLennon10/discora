@@ -75,4 +75,4 @@ Katalog mengikuti urutan album asli. Durasi dapat berbeda antar pressing atau re
 
 Detail empat album solo memakai gambar sampul arsip. Kartu katalog mengikuti aset visual frame desain. [Imagine](https://www.johnlennon.com/music/albums/imagine/) · [McCartney](https://www.paulmccartney.com/discography/albums/mccartney) · [Living in the Material World](https://jpgr.co.uk/pas10006.html) · [Ringo](https://www.jpgr.co.uk/pctc252.html)
 
-Cerita di detail album dan lagu menggunakan data editorial di `web/src/trivia-data.js`. Galeri *Abbey Road* dan *Imagine* menampilkan foto dengan tanggal, kredit, dan lisensi. [Catatan riset trivia](docs/riset-trivia-discora.md)
+Cerita di detail album dan lagu menggunakan data editorial di `web/src/trivia-data.js` dan `web/src/extra-trivia.js`. Galeri *Revolver*, *Abbey Road*, dan *Imagine* menampilkan arsip dengan tanggal, kredit, dan lisensi. [Catatan riset trivia](docs/riset-trivia-discora.md)

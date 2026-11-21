@@ -1,6 +1,27 @@
 const bedInSource = 'https://commons.wikimedia.org/wiki/File:John_Lennon_en_zijn_echtgenote_Yoko_Ono_op_huwelijksreis_in_Amsterdam._John_Lenn,_Bestanddeelnr_'
 
 export const albumGalleries = {
+  revolver: {
+    title: 'Arsip The Beatles, 1966',
+    photos: [
+      {
+        file: 'archive-beatles-wcfl',
+        alt: 'Anggota The Beatles bersama penyiar radio Jim Stagg',
+        caption: 'The Beatles bersama penyiar Jim Stagg, Agustus 1966. Dimuat WCFL dalam Sound 10 Survey edisi Oktober.',
+        credit: 'WCFL / Chicago Federation of Labor',
+        license: 'Domain publik (AS)',
+        source: 'https://commons.wikimedia.org/wiki/File:WCFL_Sound_10_survey_October_1966_Beatles_Jim_Stagg_(cropped).jpg',
+      },
+      {
+        file: 'archive-yellow-submarine-ad',
+        alt: 'Ilustrasi kapal selam kuning di bawah ombak, dengan tulisan Eleanor Rigby',
+        caption: 'Iklan Capitol Records untuk singel “Yellow Submarine” dan “Eleanor Rigby”, Billboard, Agustus 1966.',
+        credit: 'Capitol Records',
+        license: 'Domain publik (AS)',
+        source: 'https://commons.wikimedia.org/wiki/File:YellowSubTradeAd.jpg',
+      },
+    ],
+  },
   'abbey-road': {
     title: 'Zebra crossing Abbey Road',
     photos: [
@@ -50,4 +71,6 @@ export const albumGalleries = {
 
 export const trackGalleries = {
   'imagine-imagine': albumGalleries.imagine,
+  'yellow-submarine': albumGalleries.revolver,
+  'eleanor-rigby': albumGalleries.revolver,
 }

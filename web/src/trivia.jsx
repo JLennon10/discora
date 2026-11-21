@@ -3,12 +3,8 @@ import { ArrowUpRight, BookOpen, Camera, ChevronLeft, ChevronRight, Pause, Play 
 
 const slideInterval = 5500
 
-export function Story({ story, album = false }) {
-  const headingId = useId()
-  if (!story) return null
-
-  return <section id={album ? 'cerita-album' : undefined} tabIndex={album ? -1 : undefined} className="panel story" aria-labelledby={headingId}>
-    <h2 id={headingId}><BookOpen size={17} aria-hidden="true" /> {album ? 'Cerita di Balik Album' : 'Cerita di Balik Lagu'}</h2>
+function StoryEntry({ story }) {
+  return <div className="story-entry">
     {story.title && <h3>{story.title}</h3>}
     <p>{story.text}</p>
     <ul className="story-sources" aria-label="Sumber cerita">
@@ -16,6 +12,17 @@ export function Story({ story, album = false }) {
         <a href={source.url} target="_blank" rel="noreferrer">{source.label} <ArrowUpRight size={13} aria-hidden="true" /></a>
       </li>)}
     </ul>
+  </div>
+}
+
+export function Story({ story, extra, album = false }) {
+  const headingId = useId()
+  if (!story) return null
+
+  return <section id={album ? 'cerita-album' : undefined} tabIndex={album ? -1 : undefined} className="panel story" aria-labelledby={headingId}>
+    <h2 id={headingId}><BookOpen size={17} aria-hidden="true" /> {album ? 'Cerita di Balik Album' : 'Cerita di Balik Lagu'}</h2>
+    <StoryEntry story={story} />
+    {extra && <StoryEntry story={extra} />}
   </section>
 }
 

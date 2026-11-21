@@ -450,6 +450,7 @@ p { color: var(--muted); font-size: 13px; line-height: 1.43; }
 .story h2, .archive-gallery h2 { display: flex; align-items: center; gap: 7px; }
 .story h2 svg, .archive-gallery h2 svg { color: var(--accent); }
 .story h3 { margin-top: 10px; font-size: 19px; }
+.story-entry + .story-entry { margin-top: 8px; padding-top: 4px; border-top: 1px solid var(--high); }
 .story p { margin-top: 7px; font-size: 14px; line-height: 1.62; }
 .story-sources {
   display: flex;

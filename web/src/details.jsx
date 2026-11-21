@@ -9,6 +9,7 @@ import { useCollection } from './collection.jsx'
 import { albumGalleries, trackGalleries } from './archive-photos.js'
 import { PhotoGallery, Story } from './trivia.jsx'
 import { albumStories, trackStories } from './trivia-data.js'
+import { extraAlbumStories, extraTrackStories } from './extra-trivia.js'
 
 const memberRoles = {
   'john-lennon': 'Vokal, Gitar Ritem, Piano',
@@ -129,7 +130,7 @@ function AlbumProfile({ album }) {
       <p>{album.summary}</p>
       {album.source_url && <a href={album.source_url} target="_blank" rel="noreferrer">Lihat sumber rilisan <ArrowUpRight size={14} /></a>}
     </aside>}
-    <Story story={story} album />
+    <Story story={story} extra={extraAlbumStories[album.slug]} album />
     {gallery && <PhotoGallery key={album.slug} gallery={gallery} />}
   </article>
 }
@@ -178,7 +179,7 @@ function TrackProfile({ track }) {
       {recordingNote && <p className="track-description">{recordingNote}</p>}
       <CreditBlock track={track} />
     </div>
-    <Story story={trackStories[track.id]} />
+    <Story story={trackStories[track.id]} extra={extraTrackStories[track.id]} />
     <Link className="button return-button" to={returnRoute} replace><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
     {gallery && <PhotoGallery key={track.id} gallery={gallery} />}
   </article>
