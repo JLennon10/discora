@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation, useNavigate, useNavigationType } from 'react-router-dom'
 import {
-  Archive, ArrowLeft, AudioLines, BookOpen, Check, ChevronRight, Disc, Search,
-  Share2, Sparkles, UserRound, UsersRound,
+  Archive, ArrowLeft, AudioLines, BookOpen, Check, ChevronRight, Disc, LoaderCircle, Search,
+  Share2, Sparkles, UserRound, UsersRound, X,
 } from 'lucide-react'
 import { artistPhotos } from './artist-photos.js'
+import { CollectionFeedback } from './collection.jsx'
+import { usePageScroll } from './page-scroll.js'
 
 const tabs = [
   { label: 'Artis', to: '/artis', Icon: UsersRound },
@@ -52,7 +54,8 @@ function Header({ returnRoute }) {
     <header className={'topbar ' + (detail ? 'detail-topbar' : '')}>
       {detail ? <>
         <button className="icon-button" aria-label="Kembali" onClick={() => {
-          if (returnRoute) navigate(returnRoute, { replace: true })
+          if (returnRoute?.back) navigate(-1)
+          else if (returnRoute) navigate(returnRoute.to, { replace: true })
           else if (window.history.state?.idx > 0) navigate(-1)
           else navigate(section === 'artis' ? '/artis' : '/album')
         }}><ArrowLeft /></button>
@@ -82,11 +85,12 @@ function Header({ returnRoute }) {
 export function Shell() {
   const { pathname } = useLocation()
   const [trackReturn, setTrackReturn] = useState(null)
-  const returnRoute = trackReturn?.pathname === pathname ? trackReturn.to : null
+  const returnRoute = trackReturn?.pathname === pathname ? trackReturn : null
   return <div className="app">
     <a className="skip" href="#konten">Langsung ke konten</a>
     <Header returnRoute={returnRoute} />
     <main id="konten"><Outlet context={setTrackReturn} /></main>
+    <CollectionFeedback />
     <nav className="bottom-nav" aria-label="Navigasi utama">
       {tabs.map(({ label, to, Icon }) => {
         const icon = <><Icon size={22} strokeWidth={2.3} /><span>{label}</span></>
@@ -110,15 +114,33 @@ export function Intro({ Icon, eyebrow, title, children }) {
 }
 
 export function SearchBox({ value, onChange, placeholder, autoFocus }) {
-  return <label className="search-box">
-    <Search size={18} />
-    <input type="search" id="catalog-search" value={value} onChange={event => onChange(event.target.value)}
-      placeholder={placeholder} aria-label={placeholder} autoFocus={autoFocus} />
-  </label>
+  const input = useRef(null)
+  const navigationType = useNavigationType()
+  return <div className="search-box">
+    <label className="search-icon" htmlFor="catalog-search" aria-hidden="true"><Search size={18} /></label>
+    <input type="search" id="catalog-search" ref={input} value={value} onChange={event => onChange(event.target.value)}
+      placeholder={placeholder} aria-label={placeholder} autoFocus={autoFocus && navigationType !== 'POP'} />
+    {value && <button type="button" className="icon-button clear-search" aria-label="Hapus pencarian" onClick={() => {
+      onChange('')
+      input.current.focus({ preventScroll: true })
+    }}><X size={16} aria-hidden="true" /></button>}
+  </div>
 }
 
 export function FilterBar({ options, value, choose, label }) {
-  return <div className="filter-bar" role="group" aria-label={label}>
+  const bar = useRef(null)
+
+  useLayoutEffect(() => {
+    const strip = bar.current
+    const selected = strip.querySelector('[aria-pressed="true"]')
+    if (!selected) return
+    const bounds = strip.getBoundingClientRect()
+    const chip = selected.getBoundingClientRect()
+    if (chip.right > bounds.right) strip.scrollLeft += chip.right - bounds.right + 3
+    else if (chip.left < bounds.left) strip.scrollLeft += chip.left - bounds.left - 3
+  }, [value])
+
+  return <div className="filter-bar" ref={bar} role="group" aria-label={label}>
     {options.map(({ id, label, Icon }) => <button type="button" key={id} aria-pressed={value === id} onClick={() => choose(id)}>
       {Icon && <Icon size={14} />}{label}
     </button>)}
@@ -127,7 +149,7 @@ export function FilterBar({ options, value, choose, label }) {
 
 export function Notice({ title, children, action, busy = false }) {
   return <div className="notice" role="status" aria-busy={busy}>
-    <h2>{title}</h2>
+    <h2>{busy && <LoaderCircle className="loading-disc" size={19} aria-hidden="true" />}{title}</h2>
     {children && <p>{children}</p>}
     {action}
   </div>
@@ -167,7 +189,9 @@ export function Resource({ endpoint, children }) {
     return () => controller.abort()
   }, [endpoint, attempt])
 
-  if (result?.endpoint !== endpoint || result.attempt !== attempt) return <Notice title="Lagi buka katalog…" busy />
+  const ready = result?.endpoint === endpoint && result.attempt === attempt
+  usePageScroll(ready)
+  if (!ready) return <Notice title="Lagi buka katalog…" busy />
   if (result.missing) return <Missing />
   if (result.failed) return <Notice
     title={result.offline ? 'Halaman belum tersimpan untuk offline' : 'Katalognya belum kebuka'}
@@ -223,7 +247,7 @@ export function Tracklist({ album }) {
       </div>
       <ol start={album.tracks.find(track => track.side === side)?.position}>
         {album.tracks.filter(track => track.side === side).map(track => <li key={track.id}>
-          <Link className="track-row" id={'trek-' + track.id} to={'/lagu/' + track.id}>
+          <Link className="track-row" id={'trek-' + track.id} to={'/lagu/' + track.id} state={{ fromAlbum: album.slug }}>
             <span className="track-number">{String(track.position).padStart(2, '0')}</span>
             <span className="track-text">
               <strong>{track.title}</strong>

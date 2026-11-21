@@ -8,6 +8,7 @@ import {
 } from './components.jsx'
 import { useCollection } from './collection.jsx'
 import { artistPhotos } from './artist-photos.js'
+import { usePageScroll } from './page-scroll.js'
 
 export function ArtistList() {
   return <Resource endpoint="artists">{artists => <Artists artists={artists} />}</Resource>
@@ -101,6 +102,7 @@ function Albums({ albums }) {
 }
 
 export function Collection() {
+  usePageScroll()
   const { albums, remove, storageError } = useCollection()
   return <div className="page collection-page">
     <div className="collection-intro">
@@ -141,6 +143,7 @@ const bibliography = [
 ]
 
 export function About() {
+  usePageScroll()
   return <div className="page about-page">
     <Intro Icon={BookOpen} eyebrow="Di balik katalog" title="Tentang Discora">
       Kenapa Discora dibuat, siapa yang ngerjain, dan dari mana data albumnya.

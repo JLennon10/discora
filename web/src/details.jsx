@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import { Link, useLocation, useOutletContext, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BadgeCheck, BookmarkCheck,
   BookmarkPlus, ChevronRight, Disc, Headphones, Library, ScrollText, ShieldCheck,
@@ -79,22 +79,10 @@ export function AlbumDetail() {
 
 function AlbumProfile({ album }) {
   const { albums, toggle, storageError } = useCollection()
-  const { hash } = useLocation()
   const saved = albums.some(item => item.slug === album.slug)
   const mix = album.format === 'Solo' ? 'Stereo' : album.format
   const story = albumStories[album.slug]
   const gallery = albumGalleries[album.slug]
-
-  useLayoutEffect(() => {
-    if (hash.startsWith('#trek-')) {
-      document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'center' })
-    }
-    if (hash === '#cerita-album') {
-      const story = document.getElementById('cerita-album')
-      story?.focus({ preventScroll: true })
-      story?.scrollIntoView()
-    }
-  }, [album.slug, hash])
 
   return <article className="page album-detail">
     <div className="album-hero">
@@ -159,17 +147,19 @@ function CreditBlock({ track }) {
 }
 
 function TrackProfile({ track }) {
-  const { pathname } = useLocation()
+  const { pathname, state } = useLocation()
+  const navigate = useNavigate()
   const setTrackReturn = useOutletContext()
   const returnRoute = '/album/' + track.album.slug + '#trek-' + track.id
+  const fromAlbum = state?.fromAlbum === track.album.slug && window.history.state?.idx > 0
   const mix = track.album.format === 'Solo' ? 'Stereo' : track.album.format
   const recordingNote = track.description || track.annotation
   const gallery = trackGalleries[track.id]
 
   useLayoutEffect(() => {
-    setTrackReturn({ pathname, to: returnRoute })
+    setTrackReturn({ pathname, to: returnRoute, back: fromAlbum })
     return () => setTrackReturn(null)
-  }, [pathname, returnRoute, setTrackReturn])
+  }, [pathname, returnRoute, fromAlbum, setTrackReturn])
 
   return <article className="page track-detail">
     <div className="track-edition"><span className="tag"><i /> {mix} • {track.album.catalog}</span></div>
@@ -180,7 +170,12 @@ function TrackProfile({ track }) {
       <CreditBlock track={track} />
     </div>
     <Story story={trackStories[track.id]} extra={extraTrackStories[track.id]} />
-    <Link className="button return-button" to={returnRoute} replace><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
+    <Link className="button return-button" to={returnRoute} replace onClick={event => {
+      if (fromAlbum && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+        event.preventDefault()
+        navigate(-1)
+      }
+    }}><ArrowLeft size={17} /> Kembali ke {track.album.title}</Link>
     {gallery && <PhotoGallery key={track.id} gallery={gallery} />}
   </article>
 }
