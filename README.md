@@ -1,40 +1,53 @@
 # Discora
 
-Discora adalah PWA katalog piringan hitam The Beatles dan empat personelnya. Katalog publik berisi lima profil, enam album, dan kredit penulis untuk seluruh 75 trek. Koleksi disimpan di browser perangkat.
+Discora adalah aplikasi web progresif (PWA) untuk menjelajahi piringan hitam The Beatles dan karier solo keempat personelnya. Katalognya mencakup 5 profil artis, 6 album, dan kredit penulis untuk 75 lagu.
 
-- Web publik: [Discora](https://discora-web.vercel.app)
-- API publik: [Daftar album](https://discora-api.vercel.app/api/albums)
-- Kode sumber: [Repo GitHub Discora](https://github.com/JLennon10/discora)
-- Data produksi: [Proyek Supabase Discora](https://supabase.com/dashboard/project/slrdzcfilkwqcuebxhss)
+[Buka aplikasi](https://discora-web.vercel.app) · [Lihat contoh respons API](https://discora-api.vercel.app/api/albums) · [Panduan demo asistensi](docs/demo-asistensi.md)
 
-## Jalankan di komputer
+## Fitur
 
-Gunakan Node.js 22 atau lebih baru. Jalankan perintah berikut dari akar repo.
+- Jelajahi profil artis, cari dan filter album, lalu buka daftar lagu menurut sisi piringan.
+- Lihat kredit resmi, catatan penulis, rujukan, trivia, dan galeri arsip pada entri yang relevan.
+- Simpan album ke **Koleksi**. Daftar tersimpan di `localStorage` browser.
+- Instal Discora sebagai PWA. Setelah service worker aktif, halaman katalog yang sudah dikunjungi bisa dibuka kembali saat offline selama datanya masih tersimpan di cache.
+
+## Coba di komputer tanpa Supabase
+
+Gunakan Node.js 22 atau lebih baru. Jalankan dari folder utama repositori.
 
 ```sh
 npm ci
+npm run build
+npm run preview:local
 ```
 
-Salin `api/.env.example` ke `api/.env`. Isi `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` dari pengaturan proyek Supabase. Lalu jalankan:
+Buka [preview di port 4173](http://127.0.0.1:4173). Perintah preview menjalankan Vite dan Express dengan data contoh dari repositori. Port 3000 dan 4173 perlu tersedia.
+
+## Struktur proyek
+
+| Lokasi | Peran |
+| --- | --- |
+| [`web/src/`](web/src) | Antarmuka React, rute React Router, koleksi lokal, dan konten editorial. |
+| [`web/vite.config.js`](web/vite.config.js) | Proxy API lokal, manifest PWA, dan strategi cache service worker. |
+| [`api/`](api) | Endpoint Express dan akses data dari Supabase atau katalog lokal. |
+| [`api/supabase/`](api/supabase) | Skema dan seed PostgreSQL untuk katalog. |
+| [`docs/`](docs) | Panduan demo dan catatan riset trivia. |
+
+Di produksi, Vercel meneruskan permintaan `/api` dari web ke Express. Express mengambil data katalog dari Supabase. Service worker mencoba jaringan dulu, lalu memakai respons API dari cache saat jaringan gagal atau melewati batas waktu.
+
+## Pengembangan dengan Supabase
+
+Setelah `npm ci`, salin [`api/.env.example`](api/.env.example) ke `api/.env` dan isi `SUPABASE_URL` serta `SUPABASE_PUBLISHABLE_KEY`. Siapkan basis data dengan langkah di bawah jika proyek Supabase masih kosong. Gunakan perintah ini dari folder utama untuk memulai pengembangan.
 
 ```sh
 npm run dev
 ```
 
-Buka [web Vite](http://127.0.0.1:5173). Vite memproksi `/api` ke Express pada port 3000. File lingkungan berada di backend dan diabaikan Git.
+Buka [web Vite di port 5173](http://127.0.0.1:5173). Vite meneruskan `/api` ke Express pada port 3000. Git mengabaikan `api/.env`.
 
-Jika ingin menguji PWA lokal dengan data contoh tanpa koneksi Supabase, jalankan build dan preview produksi:
+### Skema dan seed
 
-```sh
-npm run build
-npm run preview:local
-```
-
-Buka [preview produksi](http://127.0.0.1:4173). Mode ini memilih fixture lokal secara eksplisit. API produksi selalu membaca Supabase.
-
-## Skema dan seed
-
-Buka SQL Editor di proyek Supabase. Jalankan `api/supabase/schema.sql`, lalu `api/supabase/seed.sql`. Seed memakai upsert sehingga dapat dijalankan ulang untuk memperbarui entri katalog. RLS dan SQL grants memberi role `anon` serta `authenticated` akses baca. Express memakai publishable key untuk membaca.
+Buka SQL Editor di proyek Supabase. Jalankan [`schema.sql`](api/supabase/schema.sql), lalu [`seed.sql`](api/supabase/seed.sql). Seed memakai upsert sehingga dapat dijalankan ulang untuk memperbarui entri katalog. RLS dan SQL grants memberi role `anon` serta `authenticated` akses baca. Express memakai publishable key untuk membaca.
 
 Edit `api/catalog.mjs` jika data atau sumber berubah. Buat ulang seed dengan `npm run seed:generate -w api` sebelum menjalankannya di Supabase.
 
@@ -53,14 +66,6 @@ Daftar mengembalikan array JSON dan detail mengembalikan objek. Slug dan ID yang
 ## Deploy di Vercel
 
 Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Express dan root `web` dengan preset Vite. Izinkan kedua proyek mengakses file di luar root masing-masing agar dapat memakai lockfile workspace. Masukkan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` ke lingkungan proyek **API**. Set tujuan rewrite `/api/:path*` di `web/vercel.json` ke domain produksi API untuk lingkungan Anda. Konfigurasi web juga menangani refresh langsung di rute React Router.
-
-## Demo asistensi dan responsi
-
-1. Di Chrome Android, buka situs saat online dan pilih **Instal aplikasi** dari menu Chrome. Buka Discora dari ikon perangkat dalam keadaan online.
-2. Dari **Artis → The Beatles → Revolver**, buka **For No One** dan **Tomorrow Never Knows**. Tunjukkan perbedaan antara kredit resmi Lennon–McCartney dan catatan penulis utama beserta rujukannya.
-3. Dari **Album**, filter **The Beatles** dan cari *Revolver*. Buka detail album lalu pilih **Simpan ke Koleksi**. Muat ulang halaman Koleksi untuk menunjukkan bahwa album tetap tersimpan. Album bisa dihapus dari Koleksi.
-4. Setelah service worker aktif, kunjungi kembali *Revolver* dan kedua lagu. Aktifkan mode pesawat sambil memastikan Wi-Fi juga mati, lalu buka ulang kedua rute dari tracklist. Trek yang belum dikunjungi akan menampilkan pesan bahwa halaman belum tersimpan. Sambungkan kembali dan tekan **Coba lagi**.
-5. Buka langsung [Revolver](https://discora-web.vercel.app/album/revolver) dan [Tomorrow Never Knows](https://discora-web.vercel.app/lagu/tomorrow-never-knows), lalu refresh untuk menunjukkan fallback rute.
 
 ## Rujukan katalog
 
