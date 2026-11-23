@@ -49,7 +49,6 @@ function Header({ returnRoute }) {
     navigate((onCatalog ? pathname : '/album') + '?' + params, { replace: onCatalog })
   }
 
-  const title = tabs.find(tab => tab.to === '/' + section)?.label ?? 'Artis'
   return (
     <header className={'topbar ' + (detail ? 'detail-topbar' : '')}>
       {detail ? <>
@@ -66,10 +65,7 @@ function Header({ returnRoute }) {
         </div>
       </> : <Link className="brand" to="/artis">
         <img className="brand-icon" src="/icons/discora-192.png" alt="" width="32" height="32" />
-        <span className="brand-copy">
-          <span className="wordmark">Discora <span className="tag">Arsip</span></span>
-          <small>{title}</small>
-        </span>
+        <span className="wordmark">Discora</span>
       </Link>}
       <div className="header-actions">
         {detail ? <button className="icon-button" aria-label={copied === true ? 'Tautan disalin' : 'Bagikan halaman'} onClick={share}>
@@ -88,28 +84,33 @@ export function Shell() {
   const returnRoute = trackReturn?.pathname === pathname ? trackReturn : null
   return <div className="app">
     <a className="skip" href="#konten">Langsung ke konten</a>
-    <Header returnRoute={returnRoute} />
+    <div className="site-header">
+      <Header returnRoute={returnRoute} />
+      <nav className="site-nav" aria-label="Navigasi utama">
+        {tabs.map(({ label, to, Icon }) => {
+          const icon = <><Icon size={20} strokeWidth={1.9} /><span>{label}</span></>
+          if (to === '/album' && pathname.startsWith('/lagu/')) {
+            return <Link key={to} to={to} className="active" aria-current="location">{icon}</Link>
+          }
+          return <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : undefined}>
+            {icon}
+          </NavLink>
+        })}
+      </nav>
+    </div>
     <main id="konten"><Outlet context={setTrackReturn} /></main>
     <CollectionFeedback />
-    <nav className="bottom-nav" aria-label="Navigasi utama">
-      {tabs.map(({ label, to, Icon }) => {
-        const icon = <><Icon size={22} strokeWidth={2.3} /><span>{label}</span></>
-        if (to === '/album' && pathname.startsWith('/lagu/')) {
-          return <Link key={to} to={to} className="active" aria-current="location">{icon}</Link>
-        }
-        return <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : undefined}>
-          {icon}
-        </NavLink>
-      })}
-    </nav>
   </div>
 }
 
-export function Intro({ Icon, eyebrow, title, children }) {
+export function Intro({ Icon, eyebrow, title, children, image }) {
   return <div className="intro">
-    <div className="eyebrow">{Icon && <Icon size={14} />} {eyebrow}</div>
-    <h1>{title}</h1>
-    {children && <p>{children}</p>}
+    {image && <img className="intro-image" src={image} alt="" />}
+    <div className="intro-copy">
+      <div className="eyebrow">{Icon && <Icon size={14} />} {eyebrow}</div>
+      <h1>{title}</h1>
+      {children && <p>{children}</p>}
+    </div>
   </div>
 }
 
@@ -208,9 +209,9 @@ export function CuratorNote({ title, children, Icon = BookOpen }) {
   </aside>
 }
 
-export function AlbumArtwork({ album, variant = 'artwork', className = '' }) {
-  const source = album[variant] || album.cover || album.artwork
-  return <img className={'album-artwork ' + className} src={source} alt={'Sampul ' + album.title} />
+export function AlbumArtwork({ album, fallback = 'artwork' }) {
+  const source = album.cover || album[fallback] || album.artwork
+  return <img className="album-artwork" src={source} alt={'Sampul ' + album.title} />
 }
 
 export function ArtistPortrait({ artist }) {

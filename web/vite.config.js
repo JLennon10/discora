@@ -21,8 +21,8 @@ export default defineConfig({
         start_url: '/',
         scope: '/',
         display: 'standalone',
-        background_color: '#fff8f5',
-        theme_color: '#fff8f5',
+        background_color: '#faf6ef',
+        theme_color: '#faf6ef',
         icons: [
           { src: '/icons/discora-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: '/icons/discora-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },

@@ -54,7 +54,7 @@ function ArtistProfile({ artist }) {
       <div className="section-heading"><h2><Disc size={18} /> Album Pilihan</h2><span className="meta">Piringan Hitam</span></div>
       {artist.albums.map(album => <article className="panel selected-album" key={album.slug}>
         <div className="selected-copy">
-          <Link to={'/album/' + album.slug}><AlbumArtwork album={album} variant="selection_art" /></Link>
+          <Link to={'/album/' + album.slug}><AlbumArtwork album={album} fallback="selection_art" /></Link>
           <div className="selected-info">
             <div className="meta-line"><span>{album.slug === 'revolver' ? 'Master Pilihan Utama' : album.slug === 'abbey-road' ? 'Koleksi Penutup' : 'Arsip Solo'}</span><span>{album.year}</span></div>
             <h3>{album.title}</h3>
@@ -85,30 +85,32 @@ function AlbumProfile({ album }) {
   const gallery = albumGalleries[album.slug]
 
   return <article className="page album-detail">
-    <div className="album-hero">
-      <div className="record" aria-hidden="true" />
-      <div className="sleeve">
-        <AlbumArtwork album={album} variant="cover" />
-        {album.slug !== 'revolver' && <span className="sleeve-label">{mix} · {album.catalog}</span>}
+    <div className="album-feature">
+      <div className="album-hero">
+        <div className="record" aria-hidden="true" />
+        <div className="sleeve">
+          <AlbumArtwork album={album} />
+          {album.slug !== 'revolver' && <span className="sleeve-label">{mix} · {album.catalog}</span>}
+        </div>
       </div>
-    </div>
-    <div className="album-info">
-      <h1>{album.title}</h1>
-      <Link className="album-artist" to={'/artis/' + album.artist_slug}>{album.artist_name}</Link>
-      <p>{album.year} · {album.label} · 12″ Vinyl LP, 33⅓ RPM
-        <span>{mix}</span>
-      </p>
-      {(album.sides.length > 0 || album.studio || album.producer) && <div className="tags">
-        {album.sides[0] && <span className="tag">Matrix {album.sides[0]}</span>}
-        {album.studio && <span className="tag">{album.studio}</span>}
-        {album.producer && <span className="tag">Prod. {album.producer}</span>}
-      </div>}
-      <button className="button save-button" aria-pressed={saved} onClick={() => toggle(album)}>
-        {saved ? <BookmarkCheck size={17} /> : <BookmarkPlus size={17} />}
-        {saved ? 'Tersimpan di Koleksi' : 'Simpan ke Koleksi'}
-      </button>
-      {storageError && <p role="alert">Koleksinya belum bisa diperbarui. Cek penyimpanan browser, lalu coba lagi.</p>}
-      {story && <Link className="story-jump" to="#cerita-album">Cerita di Balik Album <ArrowDown size={15} aria-hidden="true" /></Link>}
+      <div className="album-info">
+        <h1>{album.title}</h1>
+        <Link className="album-artist" to={'/artis/' + album.artist_slug}>{album.artist_name}</Link>
+        <p>{album.year} · {album.label} · 12″ Vinyl LP, 33⅓ RPM
+          <span>{mix}</span>
+        </p>
+        {(album.sides.length > 0 || album.studio || album.producer) && <div className="tags">
+          {album.sides[0] && <span className="tag">Matrix {album.sides[0]}</span>}
+          {album.studio && <span className="tag">{album.studio}</span>}
+          {album.producer && <span className="tag">Prod. {album.producer}</span>}
+        </div>}
+        <button className="button save-button" aria-pressed={saved} onClick={() => toggle(album)}>
+          {saved ? <BookmarkCheck size={17} /> : <BookmarkPlus size={17} />}
+          {saved ? 'Tersimpan di Koleksi' : 'Simpan ke Koleksi'}
+        </button>
+        {storageError && <p role="alert">Koleksinya belum bisa diperbarui. Cek penyimpanan browser, lalu coba lagi.</p>}
+        {story && <Link className="story-jump" to="#cerita-album">Cerita di Balik Album <ArrowDown size={15} aria-hidden="true" /></Link>}
+      </div>
     </div>
     {album.tracks.length ? <Tracklist album={album} /> : <div className="panel solo-tracks">
       <h2><Headphones size={18} /> Daftar Lagu</h2><p>Daftar lagunya belum kebuka. Coba buka lagi saat online.</p>
