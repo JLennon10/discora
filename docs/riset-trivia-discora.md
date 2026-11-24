@@ -2,6 +2,16 @@
 
 21 November 2026 · Bahan editorial untuk enam album dan 75 lagu di katalog.
 
+## Penambahan 24 November 2026
+
+Empat album menambah 53 lagu. Judul serta durasi diambil dari metadata rilisan Apple Music, dengan urutan dan sisi piringan mengikuti edisi Inggris. Durasi yang ditampilkan memakai remaster digital 2009. Sampul berasal dari katalog resmi The Beatles dan kode pressing mengacu pada arsip piringan Inggris. [Help!](https://music.apple.com/us/album/help/1441164524) · [Rubber Soul](https://music.apple.com/us/album/rubber-soul/1441164359) · [Sgt. Pepper](https://music.apple.com/us/album/sgt-peppers-lonely-hearts-club-band/1441164604) · [Let It Be](https://music.apple.com/us/album/let-it-be/1441164495) · [Katalog resmi album](https://www.thebeatles.com/albums) · [Arsip pressing Inggris](https://jpgr.co.uk/i_beatleslp_date.html)
+
+Foto galeri baru diambil dari Wikimedia Commons dan dikonversi ke WebP. Entri galeri menyimpan halaman sumber, pembuat, lisensi, serta keterangan foto. [Data galeri](../web/src/archive-photos.js)
+
+Cerita baru mencakup riset rilisan, kenangan musisi dari podcast, perdebatan asal melodi “In My Life”, dan rumor “Paul Is Dead”. Penuturan musisi, diskusi penggemar, dan bantahan tampil dengan label dan tautan masing-masing. [Cerita dan rujukan](../web/src/catalog-stories.js)
+
+## Riset awal
+
 Cerita yang paling pas buat pembuka adalah demo sedih “Yellow Submarine”, suara camar dari pita “Tomorrow Never Knows”, dan sesi foto enam jepretan *Abbey Road*. Buat bagian hubungan antarpersonel, “How Do You Sleep?” dan “I’m the Greatest” menunjukkan dua momen berbeda yang bisa diceritakan dengan sumber jelas. [Arsip Revolver 2022][rev] · [Arsip Abbey Road][ab] · [Wawancara John, 1971][cashbox] · [Kredit LP Ringo][ringo]
 
 Isi di bawah berupa draf trivia singkat. Frasa “menurut” penting untuk cerita yang berasal dari ingatan orang yang terlibat. Kalau yang terdokumentasi hanya versi rekaman alternatif, catat apa yang bisa didengar atau dibandingkan. Nomor take merujuk pada label arsip.

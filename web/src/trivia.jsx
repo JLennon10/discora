@@ -5,6 +5,7 @@ const slideInterval = 5500
 
 function StoryEntry({ story }) {
   return <div className="story-entry">
+    {story.kind && <span className="tag story-kind">{story.kind}</span>}
     {story.title && <h3>{story.title}</h3>}
     <p>{story.text}</p>
     <ul className="story-sources" aria-label="Sumber cerita">
@@ -15,18 +16,17 @@ function StoryEntry({ story }) {
   </div>
 }
 
-export function Story({ story, extra, album = false }) {
+export function Story({ stories, album = false }) {
   const headingId = useId()
-  if (!story) return null
+  if (!stories.length) return null
 
   return <section id={album ? 'cerita-album' : undefined} tabIndex={album ? -1 : undefined} className="panel story" aria-labelledby={headingId}>
     <h2 id={headingId}><BookOpen size={17} aria-hidden="true" /> {album ? 'Cerita di Balik Album' : 'Cerita di Balik Lagu'}</h2>
-    <StoryEntry story={story} />
-    {extra && <StoryEntry story={extra} />}
+    {stories.map(story => <StoryEntry key={story.title ?? story.text} story={story} />)}
   </section>
 }
 
-export function PhotoGallery({ gallery }) {
+export function PhotoGallery({ gallery, id }) {
   const { photos } = gallery
   const headingId = useId()
   const viewportId = useId()
@@ -75,6 +75,8 @@ export function PhotoGallery({ gallery }) {
   }, [playing, active, photos.length])
 
   return <section
+    id={id}
+    tabIndex={id ? -1 : undefined}
     className="panel archive-gallery"
     aria-labelledby={headingId}
     aria-roledescription="galeri geser"
@@ -122,6 +124,7 @@ export function PhotoGallery({ gallery }) {
         {photo.licenseUrl
           ? <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.license}</a>
           : photo.license}
+        {photo.converted && <span>· Ukuran disesuaikan untuk web</span>}
       </p>
     </div>
   </section>

@@ -6,6 +6,10 @@ const materialSleeve = 'https://beatlesvinyl.com.ua/uk/george/lp/PAS_10006.html'
 const ringoSource = 'https://store.ringostarr.com/products/ringo-cd'
 const ringoSleeve = 'https://www.jpgr.co.uk/pctc252.html'
 const revolverSessions = beatles + 'announcing-revolver-special-editions'
+const helpSource = beatles + 'help-0'
+const rubberSoulSource = beatles + 'rubber-soul'
+const sgtPepperSource = beatles + 'sgt-peppers-lonely-hearts-club-band-0'
+const letItBeSource = beatles + 'let-it-be-0'
 
 export const artists = [
   {
@@ -93,6 +97,34 @@ export const albums = [
     cover: '/art/ringo-cover.webp', artwork: '/art/ringo.webp',
     studio: 'Sunset Sound Recorders', producer: 'Richard Perry', edition: 'Apple Stereo', source_url: ringoSource,
     summary: 'Album solo ketiga Ringo Starr diproduseri Richard Perry. John Lennon, Paul McCartney, dan George Harrison ikut tampil serta menyumbangkan lagu, termasuk Photograph yang ditulis Ringo bersama George.',
+  },
+  {
+    slug: 'help', title: 'Help!', artist_slug: 'the-beatles', artist_name: 'The Beatles', rank: 7,
+    year: 1965, format: 'Stereo', catalog: 'PCS 3071', label: 'Parlophone / EMI', track_count: 14,
+    cover: '/art/help-cover.webp', artwork: '/art/help-cover.webp',
+    studio: 'EMI Studios, Abbey Road', producer: 'George Martin', edition: 'Parlophone Stereo (UK)', source_url: helpSource,
+    summary: 'Sisi A memuat tujuh lagu dari film Help! Sisi B mencakup Yesterday, yang direkam dengan gitar akustik, vokal Paul McCartney, dan kuartet dawai.',
+  },
+  {
+    slug: 'rubber-soul', title: 'Rubber Soul', artist_slug: 'the-beatles', artist_name: 'The Beatles', rank: 8,
+    year: 1965, format: 'Stereo', catalog: 'PCS 3075', label: 'Parlophone / EMI', track_count: 14,
+    cover: '/art/rubber-soul-cover.webp', artwork: '/art/rubber-soul-cover.webp',
+    studio: 'EMI Studios, Abbey Road', producer: 'George Martin', edition: 'Parlophone Stereo (UK)', source_url: rubberSoulSource,
+    summary: 'Rilisan Inggris menampilkan 14 lagu, termasuk Norwegian Wood dengan permainan sitar George Harrison. Foto sampul karya Robert Freeman tampak memanjang karena bidang proyeksinya miring saat desainnya diperlihatkan kepada band.',
+  },
+  {
+    slug: 'sgt-pepper', title: "Sgt. Pepper’s Lonely Hearts Club Band", artist_slug: 'the-beatles', artist_name: 'The Beatles', rank: 9,
+    year: 1967, format: 'Stereo', catalog: 'PCS 7027', label: 'Parlophone / EMI', track_count: 13,
+    cover: '/art/sgt-pepper-cover.webp', artwork: '/art/sgt-pepper-cover.webp',
+    studio: 'EMI Studios, Abbey Road', producer: 'George Martin', edition: 'Parlophone Stereo (UK)', source_url: sgtPepperSource,
+    summary: 'The Beatles tampil sebagai band fiktif di lagu pembuka, lalu memperkenalkan Ringo sebagai Billy Shears. Reprise lagu pembuka mengantar pendengar ke A Day in the Life.',
+  },
+  {
+    slug: 'let-it-be', title: 'Let It Be', artist_slug: 'the-beatles', artist_name: 'The Beatles', rank: 10,
+    year: 1970, format: 'Stereo', catalog: 'PCS 7096', label: 'Apple Records', track_count: 12,
+    cover: '/art/let-it-be-cover.webp', artwork: '/art/let-it-be-cover.webp',
+    producer: 'Phil Spector', edition: 'Apple Stereo (UK)', source_url: letItBeSource,
+    summary: 'Album ini berawal dari sesi Get Back pada Januari 1969. Beberapa penampilan berasal dari konser atap kantor Apple di Savile Row. Phil Spector menyiapkan versi album yang dirilis pada Mei 1970.',
   },
 ].map(album => ({
   selection_art: null, collection_art: null, studio: null, producer: null, sides: [],
@@ -266,6 +298,95 @@ const ringo = [
   }],
 ]
 
+const help = [
+  ['Help!', 'help', '2:18'],
+  ['The Night Before', 'the-night-before', '2:34'],
+  ["You've Got to Hide Your Love Away", 'youve-got-to-hide-your-love-away', '2:09'],
+  ['I Need You', 'i-need-you', '2:28', harrison],
+  ['Another Girl', 'another-girl', '2:05'],
+  ["You're Going to Lose That Girl", 'youre-going-to-lose-that-girl', '2:18'],
+  ['Ticket to Ride', 'ticket-to-ride', '3:09'],
+  ['Act Naturally', 'act-naturally', '2:30', 'Johnny Russell & Voni Morrison', { source_url: beatles + 'act-naturally' }],
+  ["It's Only Love", 'its-only-love', '1:56'],
+  ['You Like Me Too Much', 'you-like-me-too-much', '2:36', harrison],
+  ['Tell Me What You See', 'tell-me-what-you-see', '2:37'],
+  ["I've Just Seen a Face", 'ive-just-seen-a-face', '2:05'],
+  ['Yesterday', 'yesterday', '2:05', lennonMcCartney, {
+    annotation: 'Kuartet dawai George Martin',
+    source_url: beatles + 'yesterday',
+    writer: 'Paul McCartney',
+    writing_note: 'George Martin mengenang judul sementara Scrambled Egg sebelum Paul menyelesaikan liriknya.',
+    writing_source_url: helpSource,
+  }],
+  ['Dizzy Miss Lizzy', 'dizzy-miss-lizzy', '2:54', 'Larry Williams', { source_url: beatles + 'dizzy-miss-lizzy' }],
+]
+
+const rubberSoul = [
+  ['Drive My Car', 'drive-my-car', '2:27'],
+  ['Norwegian Wood (This Bird Has Flown)', 'norwegian-wood-this-bird-has-flown', '2:04', lennonMcCartney, {
+    annotation: 'Sitar George Harrison',
+    source_url: beatles + 'norwegian-wood-bird-has-flown',
+  }],
+  ["You Won't See Me", 'you-wont-see-me', '3:19'],
+  ['Nowhere Man', 'nowhere-man', '2:43'],
+  ['Think for Yourself', 'think-for-yourself', '2:18', harrison],
+  ['The Word', 'the-word', '2:43'],
+  ['Michelle', 'michelle', '2:42'],
+  ['What Goes On', 'what-goes-on', '2:48', 'Lennon–McCartney–Starkey', { source_url: beatles + 'what-goes' }],
+  ['Girl', 'girl', '2:31'],
+  ["I'm Looking Through You", 'im-looking-through-you', '2:26'],
+  ['In My Life', 'in-my-life', '2:26', lennonMcCartney, {
+    annotation: 'Solo piano George Martin',
+  }],
+  ['Wait', 'wait', '2:14'],
+  ['If I Needed Someone', 'if-i-needed-someone', '2:22', harrison],
+  ['Run For Your Life', 'run-for-your-life', '2:19'],
+]
+
+const sgtPepper = [
+  ["Sgt. Pepper's Lonely Hearts Club Band", 'sgt-peppers-lonely-hearts-club-band', '2:01'],
+  ['With a Little Help from My Friends', 'with-a-little-help-from-my-friends', '2:44', lennonMcCartney, {
+    annotation: 'Vokal utama Ringo Starr sebagai Billy Shears',
+  }],
+  ['Lucy in the Sky with Diamonds', 'lucy-in-the-sky-with-diamonds', '3:28'],
+  ['Getting Better', 'getting-better', '2:48'],
+  ['Fixing a Hole', 'fixing-a-hole', '2:36'],
+  ["She's Leaving Home", 'shes-leaving-home', '3:35'],
+  ['Being for the Benefit of Mr. Kite!', 'being-for-the-benefit-of-mr-kite', '2:37'],
+  ['Within You Without You', 'within-you-without-you', '5:04', harrison, {
+    annotation: 'Sitar, tabla, dan alat musik dawai India',
+  }],
+  ["When I'm Sixty-Four", 'when-im-sixty-four', '2:37'],
+  ['Lovely Rita', 'lovely-rita', '2:42'],
+  ['Good Morning Good Morning', 'good-morning-good-morning', '2:41'],
+  ["Sgt. Pepper's Lonely Hearts Club Band (Reprise)", 'sgt-peppers-lonely-hearts-club-band-reprise', '1:19'],
+  ['A Day in the Life', 'a-day-in-the-life', '5:35', lennonMcCartney, {
+    annotation: 'Orkestra dan akor piano penutup',
+  }],
+]
+
+const letItBe = [
+  ['Two of Us', 'two-of-us', '3:35'],
+  ['Dig a Pony', 'dig-a-pony', '3:55'],
+  ['Across the Universe', 'across-the-universe', '3:48'],
+  ['I Me Mine', 'i-me-mine', '2:25', harrison],
+  ['Dig It', 'dig-it', '0:50', 'John Lennon, Paul McCartney, George Harrison & Richard Starkey', { source_url: beatles + 'dig-it' }],
+  ['Let It Be', 'let-it-be', '4:03', lennonMcCartney, {
+    annotation: 'Mix album dengan produksi Phil Spector',
+    writer: 'Paul McCartney',
+    writing_note: 'Versi album memakai mix yang berbeda dari singel yang dirilis pada Maret 1970.',
+    writing_source_url: 'https://www.thebeatles.com/let-it-be-1',
+  }],
+  ['Maggie Mae', 'maggie-mae', '0:40', 'Tradisional, aransemen Lennon, McCartney, Harrison & Starkey', { source_url: beatles + 'maggie-mae' }],
+  ["I've Got a Feeling", 'ive-got-a-feeling', '3:37'],
+  ['One After 909', 'one-after-909', '2:53'],
+  ['The Long and Winding Road', 'the-long-and-winding-road', '3:38'],
+  ['For You Blue', 'for-you-blue', '2:32', harrison],
+  ['Get Back', 'get-back', '3:07', lennonMcCartney, {
+    annotation: 'Piano elektrik Billy Preston',
+  }],
+]
+
 function makeTracks(albumSlug, sideOneLength, entries, { source, defaultCredit = lennonMcCartney } = {}) {
   return entries.map(([title, slug, duration, credit = defaultCredit, details], index) => ({
     id: source ? albumSlug + '-' + slug : slug,
@@ -292,4 +413,8 @@ export const tracks = [
   ...makeTracks('mccartney', 7, mccartney, { source: mccartneySource, defaultCredit: 'Paul McCartney' }),
   ...makeTracks('living-in-the-material-world', 6, materialWorld, { source: materialSleeve, defaultCredit: harrison }),
   ...makeTracks('ringo', 5, ringo, { source: ringoSleeve }),
+  ...makeTracks('help', 7, help, { source: helpSource }),
+  ...makeTracks('rubber-soul', 7, rubberSoul, { source: rubberSoulSource }),
+  ...makeTracks('sgt-pepper', 7, sgtPepper, { source: sgtPepperSource }),
+  ...makeTracks('let-it-be', 7, letItBe, { source: letItBeSource }),
 ]

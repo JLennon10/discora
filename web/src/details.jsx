@@ -6,10 +6,11 @@ import {
 } from 'lucide-react'
 import { AlbumArtwork, ArtistPortrait, Resource, Tracklist } from './components.jsx'
 import { useCollection } from './collection.jsx'
-import { albumGalleries, trackGalleries } from './archive-photos.js'
+import { albumGalleries, artistGalleries, trackGalleries } from './archive-photos.js'
 import { PhotoGallery, Story } from './trivia.jsx'
 import { albumStories, trackStories } from './trivia-data.js'
 import { extraAlbumStories, extraTrackStories } from './extra-trivia.js'
+import { catalogAlbumStories, catalogTrackStories } from './catalog-stories.js'
 
 const memberRoles = {
   'john-lennon': 'Vokal, Gitar Ritem, Piano',
@@ -25,6 +26,7 @@ export function ArtistDetail() {
 
 function ArtistProfile({ artist }) {
   const group = artist.kind === 'group'
+  const gallery = artistGalleries[artist.slug]
   return <article className="page artist-detail">
     <div className={'artist-hero' + (artist.image ? '' : ' solo-hero')}>
       {artist.image && <img src={artist.image} alt="" />}
@@ -56,7 +58,7 @@ function ArtistProfile({ artist }) {
         <div className="selected-copy">
           <Link to={'/album/' + album.slug}><AlbumArtwork album={album} fallback="selection_art" /></Link>
           <div className="selected-info">
-            <div className="meta-line"><span>{album.slug === 'revolver' ? 'Master Pilihan Utama' : album.slug === 'abbey-road' ? 'Koleksi Penutup' : 'Arsip Solo'}</span><span>{album.year}</span></div>
+            <div className="meta-line"><span>{album.slug === 'revolver' ? 'Master Pilihan Utama' : group ? 'Album Studio' : 'Arsip Solo'}</span><span>{album.year}</span></div>
             <h3>{album.title}</h3>
             <p>{album.track_count} Trek · {album.label}</p>
             <div className="tags"><span className="tag">{album.catalog}</span><span className="tag">{album.edition}</span></div>
@@ -65,6 +67,7 @@ function ArtistProfile({ artist }) {
         <Link className={'button' + (album.slug === 'revolver' ? '' : ' subtle')} to={'/album/' + album.slug}>Lihat Detail Album {album.title} <ArrowRight size={16} /></Link>
       </article>)}
     </section>
+    {gallery && <PhotoGallery key={artist.slug} gallery={gallery} />}
     <aside className="provenance">
       <div className="meta"><ShieldCheck size={15} /> Kurasi Provenansi {group ? 'Abbey Road' : 'Arsip'}</div>
       <p>Mau cek edisinya? Label, kode katalog, dan link sumber bisa kamu lihat di detail album.</p>
@@ -81,7 +84,7 @@ function AlbumProfile({ album }) {
   const { albums, toggle, storageError } = useCollection()
   const saved = albums.some(item => item.slug === album.slug)
   const mix = album.format === 'Solo' ? 'Stereo' : album.format
-  const story = albumStories[album.slug]
+  const stories = [albumStories[album.slug], extraAlbumStories[album.slug], catalogAlbumStories[album.slug]].filter(Boolean)
   const gallery = albumGalleries[album.slug]
 
   return <article className="page album-detail">
@@ -109,7 +112,10 @@ function AlbumProfile({ album }) {
           {saved ? 'Tersimpan di Koleksi' : 'Simpan ke Koleksi'}
         </button>
         {storageError && <p role="alert">Koleksinya belum bisa diperbarui. Cek penyimpanan browser, lalu coba lagi.</p>}
-        {story && <Link className="story-jump" to="#cerita-album">Cerita di Balik Album <ArrowDown size={15} aria-hidden="true" /></Link>}
+        {(stories.length > 0 || gallery) && <div className="album-jumps">
+          {stories.length > 0 && <Link className="story-jump" to="#cerita-album">Cerita di Balik Album <ArrowDown size={15} aria-hidden="true" /></Link>}
+          {gallery && <Link className="story-jump" to="#galeri-album">Galeri Arsip <ArrowDown size={15} aria-hidden="true" /></Link>}
+        </div>}
       </div>
     </div>
     {album.tracks.length ? <Tracklist album={album} /> : <div className="panel solo-tracks">
@@ -120,8 +126,8 @@ function AlbumProfile({ album }) {
       <p>{album.summary}</p>
       {album.source_url && <a href={album.source_url} target="_blank" rel="noreferrer">Lihat sumber rilisan <ArrowUpRight size={14} /></a>}
     </aside>}
-    <Story story={story} extra={extraAlbumStories[album.slug]} album />
-    {gallery && <PhotoGallery key={album.slug} gallery={gallery} />}
+    <Story stories={stories} album />
+    {gallery && <PhotoGallery key={album.slug} gallery={gallery} id="galeri-album" />}
   </article>
 }
 
@@ -171,7 +177,7 @@ function TrackProfile({ track }) {
       {recordingNote && <p className="track-description">{recordingNote}</p>}
       <CreditBlock track={track} />
     </div>
-    <Story story={trackStories[track.id]} extra={extraTrackStories[track.id]} />
+    <Story stories={[trackStories[track.id], extraTrackStories[track.id], catalogTrackStories[track.id]].filter(Boolean)} />
     <Link className="button return-button" to={returnRoute} replace onClick={event => {
       if (fromAlbum && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault()

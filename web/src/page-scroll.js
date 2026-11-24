@@ -22,10 +22,10 @@ export function usePageScroll(ready = true) {
     if (saved !== undefined) {
       window.scrollTo(0, saved)
     } else if (target) {
-      const story = hash === '#cerita-album'
-      const smooth = story && samePage && navigationType === 'PUSH'
+      const albumSection = hash === '#cerita-album' || hash === '#galeri-album'
+      const smooth = albumSection && samePage && navigationType === 'PUSH'
         && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (story) target.focus({ preventScroll: true })
+      if (albumSection) target.focus({ preventScroll: true })
       target.scrollIntoView({
         block: hash.startsWith('#trek-') ? 'center' : 'start',
         behavior: smooth ? 'smooth' : 'instant',

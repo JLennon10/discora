@@ -1,6 +1,6 @@
 # Discora
 
-Discora adalah aplikasi web progresif (PWA) untuk menjelajahi piringan hitam The Beatles dan karier solo keempat personelnya. Katalognya mencakup 5 profil artis, 6 album, dan kredit penulis untuk 75 lagu.
+Discora adalah aplikasi web progresif (PWA) untuk menjelajahi piringan hitam The Beatles dan karier solo keempat personelnya. Katalognya mencakup 5 profil artis, 10 album, dan kredit penulis untuk 128 lagu.
 
 [Buka aplikasi](https://discora-web.vercel.app) · [Lihat contoh respons API](https://discora-api.vercel.app/api/albums) · [Panduan demo asistensi](docs/demo-asistensi.md)
 
@@ -72,6 +72,7 @@ Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Expres
 Katalog mengikuti urutan album asli. Durasi dapat berbeda antar pressing atau remaster. Setiap detail lagu menyertakan rujukan kredit.
 
 - [Revolver](https://usastore.thebeatles.com/products/revolver-lp-remastered) dan [catatan sesi dari Apple Corps](https://www.thebeatles.com/announcing-revolver-special-editions)
+- [Help!](https://www.thebeatles.com/help-0), [Rubber Soul](https://www.thebeatles.com/rubber-soul), [Sgt. Pepper’s Lonely Hearts Club Band](https://www.thebeatles.com/sgt-peppers-lonely-hearts-club-band-0), dan [Let It Be](https://www.thebeatles.com/let-it-be-0)
 - [Abbey Road](https://www.thebeatles.com/abbey-road-special-anniversary-editions-2019)
 - [Imagine dan catatan sampul](https://www.johnlennon.com/music/albums/imagine/)
 - [McCartney dan kredit komposisi dari MPL](https://www.paulmccartney.com/discography/albums/mccartney) · [Durasi remaster 2011](https://music.apple.com/us/album/mccartney-2011-remaster/1443150811)
@@ -80,4 +81,4 @@ Katalog mengikuti urutan album asli. Durasi dapat berbeda antar pressing atau re
 
 Katalog, detail album, dan koleksi mengutamakan gambar sampul arsip yang sama. [Imagine](https://www.johnlennon.com/music/albums/imagine/) · [McCartney](https://www.paulmccartney.com/discography/albums/mccartney) · [Living in the Material World](https://jpgr.co.uk/pas10006.html) · [Ringo](https://www.jpgr.co.uk/pctc252.html)
 
-Cerita di detail album dan lagu menggunakan data editorial di `web/src/trivia-data.js` dan `web/src/extra-trivia.js`. Galeri *Revolver*, *Abbey Road*, dan *Imagine* menampilkan arsip dengan tanggal, kredit, dan lisensi. [Catatan riset trivia](docs/riset-trivia-discora.md)
+Detail album dan lagu memuat cerita dari arsip resmi, wawancara, podcast, dan diskusi penggemar. Galeri di detail album dan profil artis menampilkan keterangan, kredit, serta lisensi foto. [Catatan riset trivia](docs/riset-trivia-discora.md)
