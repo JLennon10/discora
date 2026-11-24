@@ -1,19 +1,22 @@
 # Discora
 
-Discora adalah aplikasi web progresif (PWA) untuk menjelajahi piringan hitam The Beatles dan karier solo keempat personelnya. Katalognya mencakup 5 profil artis, 10 album, dan kredit penulis untuk 128 lagu.
+Discora is a progressive web app for exploring vinyl releases by The Beatles and all four members. The catalog covers five artists, ten albums, and 128 tracks. The interface and editorial content are in Indonesian.
 
-[Buka aplikasi](https://discora-web.vercel.app) · [Lihat contoh respons API](https://discora-api.vercel.app/api/albums) · [Panduan demo asistensi](docs/demo-asistensi.md)
+[Live app](https://discora-web.vercel.app) · [API sample](https://discora-api.vercel.app/api/albums) · [Demo walkthrough](docs/demo-guide.md)
 
-## Fitur
+## Features
 
-- Jelajahi profil artis, cari dan filter album, lalu buka daftar lagu menurut sisi piringan.
-- Lihat kredit resmi, catatan penulis, rujukan, trivia, dan galeri arsip pada entri yang relevan.
-- Simpan album ke **Koleksi**. Daftar tersimpan di `localStorage` browser.
-- Instal Discora sebagai PWA. Setelah service worker aktif, halaman katalog yang sudah dikunjungi bisa dibuka kembali saat offline selama datanya masih tersimpan di cache.
+- Browse artist profiles and search or filter the album catalog.
+- View tracklists by record side, songwriter credits, recording notes, and linked sources.
+- Explore archival galleries with captions, attribution, and license information.
+- Save albums to a collection stored in the browser.
+- Install the PWA and reopen previously visited catalog pages while their data is cached.
 
-## Coba di komputer tanpa Supabase
+## Quick start
 
-Gunakan Node.js 22 atau lebih baru. Jalankan dari folder utama repositori.
+**Requirements** · Node.js 22 or later and npm.
+
+Run these commands from the repository root.
 
 ```sh
 npm ci
@@ -21,64 +24,67 @@ npm run build
 npm run preview:local
 ```
 
-Buka [preview di port 4173](http://127.0.0.1:4173). Perintah preview menjalankan Vite dan Express dengan data contoh dari repositori. Port 3000 dan 4173 perlu tersedia.
+Open the [local preview](http://127.0.0.1:4173). This mode starts Vite on port 4173 and Express on port 3000 using the bundled catalog. It requires no Supabase credentials.
 
-## Struktur proyek
+## Development with Supabase
 
-| Lokasi | Peran |
-| --- | --- |
-| [`web/src/`](web/src) | Antarmuka React, rute React Router, koleksi lokal, dan konten editorial. |
-| [`web/vite.config.js`](web/vite.config.js) | Proxy API lokal, manifest PWA, dan strategi cache service worker. |
-| [`api/`](api) | Endpoint Express dan akses data dari Supabase atau katalog lokal. |
-| [`api/supabase/`](api/supabase) | Skema dan seed PostgreSQL untuk katalog. |
-| [`docs/`](docs) | Panduan demo dan catatan riset trivia. |
+1. Run `npm ci` from the repository root.
+2. Copy [`api/.env.example`](api/.env.example) to `api/.env` and set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`.
+3. In the Supabase SQL Editor, run [`schema.sql`](api/supabase/schema.sql), then [`seed.sql`](api/supabase/seed.sql).
+4. Run `npm run dev` and open the [Vite dev server](http://127.0.0.1:5173). It proxies `/api` requests to Express on port 3000.
 
-Di produksi, Vercel meneruskan permintaan `/api` dari web ke Express. Express mengambil data katalog dari Supabase. Service worker mencoba jaringan dulu, lalu memakai respons API dari cache saat jaringan gagal atau melewati batas waktu.
+### Update the catalog
 
-## Pengembangan dengan Supabase
-
-Setelah `npm ci`, salin [`api/.env.example`](api/.env.example) ke `api/.env` dan isi `SUPABASE_URL` serta `SUPABASE_PUBLISHABLE_KEY`. Siapkan basis data dengan langkah di bawah jika proyek Supabase masih kosong. Gunakan perintah ini dari folder utama untuk memulai pengembangan.
+Edit [`api/catalog.mjs`](api/catalog.mjs), then regenerate the SQL seed.
 
 ```sh
-npm run dev
+npm run seed:generate -w api
 ```
 
-Buka [web Vite di port 5173](http://127.0.0.1:5173). Vite meneruskan `/api` ke Express pada port 3000. Git mengabaikan `api/.env`.
+Apply the regenerated seed in Supabase. The seed uses upserts so it can be applied again when the bundled records change. The catalog grants read access to the `anon` and `authenticated` roles.
 
-### Skema dan seed
+## API reference
 
-Buka SQL Editor di proyek Supabase. Jalankan [`schema.sql`](api/supabase/schema.sql), lalu [`seed.sql`](api/supabase/seed.sql). Seed memakai upsert sehingga dapat dijalankan ulang untuk memperbarui entri katalog. RLS dan SQL grants memberi role `anon` serta `authenticated` akses baca. Express memakai publishable key untuk membaca.
-
-Edit `api/catalog.mjs` jika data atau sumber berubah. Buat ulang seed dengan `npm run seed:generate -w api` sebelum menjalankannya di Supabase.
-
-## Endpoint
-
-| Endpoint | Contoh |
+| Method and path | Example response |
 | --- | --- |
-| `GET /api/artists` | [Daftar artis](https://discora-api.vercel.app/api/artists) |
+| `GET /api/artists` | [Artist list](https://discora-api.vercel.app/api/artists) |
 | `GET /api/artists/:slug` | [The Beatles](https://discora-api.vercel.app/api/artists/the-beatles) |
-| `GET /api/albums` | [Daftar album](https://discora-api.vercel.app/api/albums) |
-| `GET /api/albums/:slug` | [Revolver dan daftar lagu](https://discora-api.vercel.app/api/albums/revolver) |
+| `GET /api/albums` | [Album list](https://discora-api.vercel.app/api/albums) |
+| `GET /api/albums/:slug` | [Revolver with tracklist](https://discora-api.vercel.app/api/albums/revolver) |
 | `GET /api/tracks/:id` | [For No One](https://discora-api.vercel.app/api/tracks/for-no-one) · [Tomorrow Never Knows](https://discora-api.vercel.app/api/tracks/tomorrow-never-knows) |
 
-Daftar mengembalikan array JSON dan detail mengembalikan objek. Slug dan ID yang tidak ditemukan mengembalikan HTTP `404`. Gangguan basis data mengembalikan HTTP `503`.
+List endpoints return JSON arrays. Detail endpoints return JSON objects. Unknown slugs and track IDs return HTTP `404`, and upstream database errors return HTTP `503`.
 
-## Deploy di Vercel
+## Deployment
 
-Buat dua proyek Hobby dari repo yang sama. Pilih root `api` dengan preset Express dan root `web` dengan preset Vite. Izinkan kedua proyek mengakses file di luar root masing-masing agar dapat memakai lockfile workspace. Masukkan `SUPABASE_URL` dan `SUPABASE_PUBLISHABLE_KEY` ke lingkungan proyek **API**. Set tujuan rewrite `/api/:path*` di `web/vercel.json` ke domain produksi API untuk lingkungan Anda. Konfigurasi web juga menangani refresh langsung di rute React Router.
+Discora uses two Vercel projects connected to the same repository.
 
-## Rujukan katalog
+| Project | Root directory | Framework preset | Configuration |
+| --- | --- | --- | --- |
+| API | `api` | Express | Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`. |
+| Web | `web` | Vite | Point the `/api/:path*` rewrite in [`web/vercel.json`](web/vercel.json) to your API deployment. |
 
-Katalog mengikuti urutan album asli. Durasi dapat berbeda antar pressing atau remaster. Setiap detail lagu menyertakan rujukan kredit.
+Enable access to files outside each project’s root directory so both builds can use the workspace lockfile. The web rewrite also supports direct links to React Router pages. The deployed API reads from Supabase, so apply changes to the seed separately when publishing catalog updates.
 
-- [Revolver](https://usastore.thebeatles.com/products/revolver-lp-remastered) dan [catatan sesi dari Apple Corps](https://www.thebeatles.com/announcing-revolver-special-editions)
-- [Help!](https://www.thebeatles.com/help-0), [Rubber Soul](https://www.thebeatles.com/rubber-soul), [Sgt. Pepper’s Lonely Hearts Club Band](https://www.thebeatles.com/sgt-peppers-lonely-hearts-club-band-0), dan [Let It Be](https://www.thebeatles.com/let-it-be-0)
-- [Abbey Road](https://www.thebeatles.com/abbey-road-special-anniversary-editions-2019)
-- [Imagine dan catatan sampul](https://www.johnlennon.com/music/albums/imagine/)
-- [McCartney dan kredit komposisi dari MPL](https://www.paulmccartney.com/discography/albums/mccartney) · [Durasi remaster 2011](https://music.apple.com/us/album/mccartney-2011-remaster/1443150811)
-- [Living in the Material World](https://www.georgeharrison.com/releases/living-in-the-material-world/) dan [arsip sampul Apple PAS 10006](https://beatlesvinyl.com.ua/uk/george/lp/PAS_10006.html)
-- [Ringo](https://store.ringostarr.com/products/ringo-cd) dan [arsip edisi Apple PCTC 252](https://www.jpgr.co.uk/pctc252.html)
+## Repository layout
 
-Katalog, detail album, dan koleksi mengutamakan gambar sampul arsip yang sama. [Imagine](https://www.johnlennon.com/music/albums/imagine/) · [McCartney](https://www.paulmccartney.com/discography/albums/mccartney) · [Living in the Material World](https://jpgr.co.uk/pas10006.html) · [Ringo](https://www.jpgr.co.uk/pctc252.html)
+| Path | Contents |
+| --- | --- |
+| [`web/src/`](web/src) | React UI, routes, collection storage, and editorial content |
+| [`web/public/art/`](web/public/art) | Album artwork, portraits, and archival images |
+| [`web/vite.config.js`](web/vite.config.js) | API proxy, PWA manifest, and service worker caching |
+| [`api/`](api) | Express API and catalog repositories |
+| [`api/supabase/`](api/supabase) | PostgreSQL schema and generated seed |
+| [`docs/`](docs) | Demo walkthrough and editorial research |
 
-Detail album dan lagu memuat cerita dari arsip resmi, wawancara, podcast, dan diskusi penggemar. Galeri di detail album dan profil artis menampilkan keterangan, kredit, serta lisensi foto. [Catatan riset trivia](docs/riset-trivia-discora.md)
+## Catalog sources
+
+The catalog follows the original album track order. Durations can vary by pressing or remaster. Track pages link to credit sources, and galleries list each image’s attribution and license.
+
+- [Help!](https://www.thebeatles.com/help-0) · [Rubber Soul](https://www.thebeatles.com/rubber-soul) · [Sgt. Pepper’s Lonely Hearts Club Band](https://www.thebeatles.com/sgt-peppers-lonely-hearts-club-band-0) · [Let It Be](https://www.thebeatles.com/let-it-be-0)
+- [Revolver LP](https://usastore.thebeatles.com/products/revolver-lp-remastered) · [Revolver session notes](https://www.thebeatles.com/announcing-revolver-special-editions) · [Abbey Road anniversary edition](https://www.thebeatles.com/abbey-road-special-anniversary-editions-2019)
+- [Imagine album and sleeve notes](https://www.johnlennon.com/music/albums/imagine/) · [McCartney album credits](https://www.paulmccartney.com/discography/albums/mccartney) · [McCartney 2011 remaster durations](https://music.apple.com/us/album/mccartney-2011-remaster/1443150811)
+- [Living in the Material World](https://www.georgeharrison.com/releases/living-in-the-material-world/) · [Apple PAS 10006 sleeve archive](https://beatlesvinyl.com.ua/uk/george/lp/PAS_10006.html) · [UK pressing notes](https://jpgr.co.uk/pas10006.html)
+- [Ringo](https://store.ringostarr.com/products/ringo-cd) · [Apple PCTC 252 pressing notes](https://www.jpgr.co.uk/pctc252.html)
+
+See the [editorial research notes](docs/catalog-research.md) for recording sources, oral histories, fan discussions, and image provenance.
