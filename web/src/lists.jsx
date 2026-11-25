@@ -156,19 +156,18 @@ export function About() {
         <div><h2>Berawal dari rasa penasaran</h2></div>
       </div>
       <p className="mission-copy">Siapa yang nulis lagu favoritmu? Apa bedanya rilisan mono dan stereo? Discora jadi tempat buat ngulik pertanyaan itu, mulai dari album The Beatles sampai rilisan solo keempat personelnya.</p>
-      <div className="tags"><span className="tag">Mono & Stereo Matriks</span><span className="tag">Kredit Lennon–McCartney</span><span className="tag">Solo Pressings</span></div>
+      <div className="tags"><span className="tag">Versi mono & stereo</span><span className="tag">Penulis lagu</span><span className="tag">Rilisan solo</span></div>
     </section>
     <section className="curator-panel panel" id="kurator">
-      <div className="eyebrow"><span>Kurator & Pengembang</span><BadgeCheck size={19} /></div>
+      <div className="eyebrow"><span>Yang bikin Discora</span><BadgeCheck size={19} /></div>
       <div className="curator-bio">
         <img src="/art/curator.webp" alt="" />
-        <div><h2>Dienis Septian Abrar</h2><p>Desainer Antarmuka & Kurator Digital Discora</p>
-          <span className="meta">Arsiparis Piringan Hitam & Desain Interaksi</span></div>
+        <div><h2>Dienis Septian Abrar</h2><p>Desain web dan nyusun katalog album</p></div>
       </div>
-      <blockquote>“Dibuat dengan dedikasi terhadap estetika analog dan tipografi editorial piringan hitam.”</blockquote>
+      <blockquote>“Kalau satu album bisa bikin kamu buka lima tab buat bandingin rilisannya, selamat datang di Discora.”</blockquote>
     </section>
     <section className="bibliography">
-      <div className="section-heading"><h2><ScrollText size={17} /> Sumber Data & Bibliografi</h2><span className="tag">4 Rujukan</span></div>
+      <div className="section-heading"><h2><ScrollText size={17} /> Referensi</h2><span className="tag">4 sumber</span></div>
       <ol>{bibliography.map(([title, author, details, url], index) => <li key={title}>
         <span className="tag">{String(index + 1).padStart(2, '0')}</span><div>
           {url ? <h3><a href={url} target="_blank" rel="noreferrer">{title}</a></h3> : <h3>{title}</h3>}
